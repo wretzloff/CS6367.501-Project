@@ -24,12 +24,23 @@ package com.example.helloworld;
     	  Label label = new Label(parent, SWT.WRAP);
     	  label.setText("Choose project to test: ");
          
-    	  Combo combo = new Combo(parent, SWT.DROP_DOWN);
-    	  combo.setItems(projectNamesArray);
+    	  Combo ddl = new Combo(parent, SWT.DROP_DOWN);
+    	  ddl.setItems(projectNamesArray);
     	  
     	  Button startButton = new Button(parent, SWT.WRAP);
-    	  //startButton.setBounds(0, 10, 3, 3);
     	  startButton.setText("Start");
+    	  startButton.addListener(SWT.Selection, new Listener() 
+    	  {
+    	      public void handleEvent(Event e) 
+    	      {
+    	        switch (e.type) 
+    	        {
+    	        	case SWT.Selection:
+    	        		System.out.println("Button pressed: " + ddl.getSelectionIndex());
+    	        		break;
+    	        }
+    	      }
+    	   });
       }
       
       public void setFocus() 
