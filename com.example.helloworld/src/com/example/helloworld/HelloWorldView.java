@@ -26,6 +26,10 @@ package com.example.helloworld;
          
     	  Combo combo = new Combo(parent, SWT.DROP_DOWN);
     	  combo.setItems(projectNamesArray);
+    	  
+    	  Button startButton = new Button(parent, SWT.WRAP);
+    	  //startButton.setBounds(0, 10, 3, 3);
+    	  startButton.setText("Start");
       }
       
       public void setFocus() 
