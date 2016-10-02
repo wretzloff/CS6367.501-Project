@@ -106,10 +106,19 @@ package com.example.helloworld;
       
       public void startButtonPressed()
       {
-    	  //System.out.println("Button pressed: " + comboProjectsList.getSelectionIndex());
     	  if(comboProjectsList.getSelectionIndex() >= 0)
     	  {
-    		  textStatusArea.append("Begin testing project: " + projectNamesArray[comboProjectsList.getSelectionIndex()] + "\n");
+    		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
+    		  textStatusArea.append("Begin testing project: " + projectName + "\n");
+    		  try 
+    		  {
+				copyProject(projectName);
+    		  } 
+    		  catch (CoreException e) 
+    		  {
+				//TODO Auto-generated catch block
+				e.printStackTrace();
+    		  }
     	  }
     	  else
     	  {
