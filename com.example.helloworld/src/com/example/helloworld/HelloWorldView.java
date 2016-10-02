@@ -3,12 +3,11 @@ package com.example.helloworld;
 	import org.eclipse.swt.widgets.*;
 	import org.eclipse.swt.SWT;
 	import org.eclipse.ui.part.ViewPart;
-	import java.util.ArrayList;
+	import java.util.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
 	//import org.eclipse.jdt.core.*;
 	//import org.eclipse.jdt.launching.JavaRuntime;
-
 
    public class HelloWorldView extends ViewPart 
    {
@@ -80,7 +79,7 @@ package com.example.helloworld;
     	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
     	    clone.setDescription(cloneDescription, null);
     	    return clone;
-      }
+      }//end copyProject()
       
       //Return an array of the names of the projects available in the workspace.
       public String[] getProjectNames()
@@ -102,7 +101,7 @@ package com.example.helloworld;
     	  String[] tempProjectsArray = new String[projectsList.size()];
     	  projectsList.toArray(tempProjectsArray);
     	  return tempProjectsArray;      
-      }
+      }//end getProjectNames()
       
       public void startButtonPressed()
       {
@@ -123,10 +122,6 @@ package com.example.helloworld;
     	  else
     	  {
     		  textStatusArea.append("Please make a valid selection.\n");
-    	  }
-    	  
-    	  
-      }
-      
-      
+    	  }  
+      }//end startButtonPressed()
    }
