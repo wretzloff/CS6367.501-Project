@@ -12,35 +12,44 @@ package com.example.helloworld;
 
    public class HelloWorldView extends ViewPart 
    {
-	  String[] projectNamesArray;
-      public HelloWorldView() 
-      {
-    	  projectNamesArray = getProjectNames();
+	   Label labelPrompt;
+	   Combo comboProjectsList;
+	   Button buttonStart;
+	   Text textStatusArea;
+	   String[] projectNamesArray;
+	   
+	   
+	   public HelloWorldView() 
+	   {
+		   projectNamesArray = getProjectNames();
     	  
-      }
+	   }
       
-      public void createPartControl(Composite parent) 
-      {
-    	  Label label = new Label(parent, SWT.WRAP);
-    	  label.setText("Choose project to test: ");
+	   public void createPartControl(Composite parent) 
+	   {
+		   labelPrompt = new Label(parent, SWT.WRAP);
+		   labelPrompt.setText("Choose project to test: ");
          
-    	  Combo ddl = new Combo(parent, SWT.DROP_DOWN);
-    	  ddl.setItems(projectNamesArray);
+		   comboProjectsList = new Combo(parent, SWT.DROP_DOWN);
+		   comboProjectsList.setItems(projectNamesArray);
     	  
-    	  Button startButton = new Button(parent, SWT.WRAP);
-    	  startButton.setText("Start");
-    	  startButton.addListener(SWT.Selection, new Listener() 
-    	  {
-    	      public void handleEvent(Event e) 
-    	      {
-    	        switch (e.type) 
-    	        {
-    	        	case SWT.Selection:
-    	        		System.out.println("Button pressed: " + ddl.getSelectionIndex());
-    	        		break;
-    	        }
-    	      }
-    	   });
+		   buttonStart = new Button(parent, SWT.WRAP);
+		   buttonStart.setText("Start");
+		   buttonStart.addListener(SWT.Selection, new Listener() 
+		   {
+			   public void handleEvent(Event e) 
+			   {
+				   switch (e.type) 
+				   {
+				   		case SWT.Selection:
+				   			startButtonPressed();
+				   			break;
+				   }
+			   }
+    	   	});
+		   
+		   	textStatusArea = new Text(parent, SWT.WRAP | SWT.BORDER);
+		   	textStatusArea.setBounds(100, 50, 100, 20);
       }
       
       public void setFocus() 
@@ -94,5 +103,21 @@ package com.example.helloworld;
     	  projectsList.toArray(tempProjectsArray);
     	  return tempProjectsArray;      
       }
+      
+      public void startButtonPressed()
+      {
+    	  //System.out.println("Button pressed: " + comboProjectsList.getSelectionIndex());
+    	  if(comboProjectsList.getSelectionIndex() >= 0)
+    	  {
+    		  textStatusArea.append("Begin testing project: " + projectNamesArray[comboProjectsList.getSelectionIndex()] + "\n");
+    	  }
+    	  else
+    	  {
+    		  textStatusArea.append("Please make a valid selection.\n");
+    	  }
+    	  
+    	  
+      }
+      
       
    }
