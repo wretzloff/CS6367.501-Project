@@ -112,6 +112,10 @@ package com.example.helloworld;
     		  try 
     		  {
 				copyProject(projectName);
+				IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		    	IWorkspaceRoot root = workspace.getRoot();
+		    	IProject projectCopy = root.getProject(projectName + "_copy");
+		    	textStatusArea.append("New project name: " + projectCopy.getName());
     		  } 
     		  catch (CoreException e) 
     		  {
