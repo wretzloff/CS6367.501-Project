@@ -7,6 +7,8 @@ package com.example.helloworld;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
 	import org.eclipse.jdt.core.*;
+	import org.eclipse.jdt.core.dom.*;
+	import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 	//import org.eclipse.jdt.launching.JavaRuntime;
 
    public class HelloWorldView extends ViewPart 
@@ -128,6 +130,25 @@ package com.example.helloworld;
     	    	  {
     				  String source = iCompilationUnit.getSource();
     				  textStatusArea.append(source + "\n");
+    				  
+    				  //Parse a CompilationUnit from the ICompilationUnit
+    				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+    				  //Create a ASTRewrite
+    				  AST ast = astRoot.getAST();
+    				  ASTRewrite rewriter = ASTRewrite.create(ast);
+    				  //For getting insertion position
+    				  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+    				  MethodDeclaration methodDecl = typeDecl.getMethods()[0];
+    				  Block block = methodDecl.getBody();
+    				  block.accept(new ASTVisitor() 
+    				  {
+    					  public boolean visit(MethodInvocation node) 
+    					  {
+    						  textStatusArea.append(node.getName().toString());
+    						  return true; 
+    					  }
+    				  });
+    				  
     	    	  }
     			  
     		  } 
@@ -142,4 +163,13 @@ package com.example.helloworld;
     		  textStatusArea.append("Please make a valid selection.\n");
     	  }  
       }//end startButtonPressed()
+      
+      private CompilationUnit parse_iCompilation_Unit_To_CompilationUnit(ICompilationUnit unit) 
+      {
+          ASTParser parser = ASTParser.newParser(AST.JLS8);
+          parser.setKind(ASTParser.K_COMPILATION_UNIT);
+          parser.setSource(unit);
+          parser.setResolveBindings(true);
+          return (CompilationUnit) parser.createAST(null); // parse
+      }
    }
