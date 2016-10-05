@@ -128,8 +128,8 @@ package com.example.helloworld;
     			  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
     			  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
     	    	  {
-    				  String source = iCompilationUnit.getSource();
-    				  textStatusArea.append(source + "\n");
+    				  //String source = iCompilationUnit.getSource();
+    				  //textStatusArea.append(source + "\n");
     				  
     				  //Parse a CompilationUnit from the ICompilationUnit
     				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
