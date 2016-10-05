@@ -126,10 +126,11 @@ package com.example.helloworld;
     			  IJavaProject javaProject = JavaCore.create(projectCopy);
     			  IPackageFragment package1 = javaProject.getPackageFragments()[0];
     			  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+    			  //Each ICompilationUnit represents a class
     			  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
     	    	  {
     				  //String source = iCompilationUnit.getSource();
-    				  //textStatusArea.append(source + "\n");
+    				  //System.out.println(source + "\n");
     				  
     				  //Parse a CompilationUnit from the ICompilationUnit
     				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
