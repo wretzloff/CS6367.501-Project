@@ -118,14 +118,18 @@ package com.example.helloworld;
     			  IWorkspace workspace = ResourcesPlugin.getWorkspace();
     			  IWorkspaceRoot root = workspace.getRoot();
     			  IProject projectCopy = root.getProject(projectName + "_copy");
-    			  textStatusArea.append("New project name: " + projectCopy.getName());
+    			  textStatusArea.append("New project name: " + projectCopy.getName() + "\n");
 		    	
     			  //Create an AST for the project
     			  IJavaProject javaProject = JavaCore.create(projectCopy);
     			  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-    			  ICompilationUnit unit = package1.getCompilationUnits()[0];
-    			  String source = unit.getSource();
-    			  System.out.println(source);
+    			  ICompilationUnit[] compilationUnits = package1.getCompilationUnits();
+    			  for (ICompilationUnit compilationUnit : compilationUnits) 
+    	    	  {
+    				  String source = compilationUnit.getSource();
+    				  textStatusArea.append(source + "\n");
+    	    	  }
+    			  
     		  } 
     		  catch (CoreException e) 
     		  {
