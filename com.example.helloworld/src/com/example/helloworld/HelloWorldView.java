@@ -6,7 +6,7 @@ package com.example.helloworld;
 	import java.util.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
-	//import org.eclipse.jdt.core.*;
+	import org.eclipse.jdt.core.*;
 	//import org.eclipse.jdt.launching.JavaRuntime;
 
    public class HelloWorldView extends ViewPart 
@@ -111,11 +111,21 @@ package com.example.helloworld;
     		  textStatusArea.append("Begin testing project: " + projectName + "\n");
     		  try 
     		  {
-				copyProject(projectName);
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		    	IWorkspaceRoot root = workspace.getRoot();
-		    	IProject projectCopy = root.getProject(projectName + "_copy");
-		    	textStatusArea.append("New project name: " + projectCopy.getName());
+    			  //Make a copy of the project
+    			  copyProject(projectName);
+				
+    			  //Get a handle to the copy
+    			  IWorkspace workspace = ResourcesPlugin.getWorkspace();
+    			  IWorkspaceRoot root = workspace.getRoot();
+    			  IProject projectCopy = root.getProject(projectName + "_copy");
+    			  textStatusArea.append("New project name: " + projectCopy.getName());
+		    	
+    			  //Create an AST for the project
+    			  IJavaProject javaProject = JavaCore.create(projectCopy);
+    			  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+    			  ICompilationUnit unit = package1.getCompilationUnits()[0];
+    			  String source = unit.getSource();
+    			  System.out.println(source);
     		  } 
     		  catch (CoreException e) 
     		  {
