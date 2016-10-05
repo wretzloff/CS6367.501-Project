@@ -123,10 +123,10 @@ package com.example.helloworld;
     			  //Create an AST for the project
     			  IJavaProject javaProject = JavaCore.create(projectCopy);
     			  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-    			  ICompilationUnit[] compilationUnits = package1.getCompilationUnits();
-    			  for (ICompilationUnit compilationUnit : compilationUnits) 
+    			  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+    			  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
     	    	  {
-    				  String source = compilationUnit.getSource();
+    				  String source = iCompilationUnit.getSource();
     				  textStatusArea.append(source + "\n");
     	    	  }
     			  
