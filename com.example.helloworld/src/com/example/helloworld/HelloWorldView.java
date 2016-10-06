@@ -134,21 +134,28 @@ package com.example.helloworld;
     				  
     				  //Parse a CompilationUnit from the ICompilationUnit
     				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
-    				  //Create a ASTRewrite
     				  AST ast = astRoot.getAST();
     				  ASTRewrite rewriter = ASTRewrite.create(ast);
-    				  //For getting insertion position
+    				  //Each TypeDeclaration also seems to represent a class
     				  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-    				  MethodDeclaration methodDecl = typeDecl.getMethods()[0];
-    				  Block block = methodDecl.getBody();
-    				  block.accept(new ASTVisitor() 
-    				  {
-    					  public boolean visit(MethodInvocation node) 
-    					  {
-    						  textStatusArea.append(node.getName().toString());
-    						  return true; 
-    					  }
-    				  });
+    				  //Type superclassType = typeDecl.getSuperclassType();
+    				  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
+    				  //Get all methods from the class
+    				  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
+    				  for (MethodDeclaration methodDeclaration : methodDeclarations) 
+        	    	  {
+    					  Block methodBody = methodDeclaration.getBody();
+    					  methodBody.accept(new ASTVisitor() 
+        				  {
+        					  public boolean visit(MethodInvocation node) 
+        					  {
+        						  System.out.println(node.getName().toString());
+        						  return true; 
+        					  }
+        				  });
+        	    	  }
+    				  
+    				  
     				  
     	    	  }
     			  
