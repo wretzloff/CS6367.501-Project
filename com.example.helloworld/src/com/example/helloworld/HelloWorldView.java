@@ -152,6 +152,13 @@ package com.example.helloworld;
         						  System.out.println(node.getName().toString());
         						  return true; 
         					  }
+        					  
+        					  public boolean visit(PostfixExpression node) 
+        					  {
+        						  System.out.println(node.getOperand().toString() + " " + node.getOperator().toString());
+        						  return true; 
+        					  }
+        					  
         				  });
         	    	  }
     				  
