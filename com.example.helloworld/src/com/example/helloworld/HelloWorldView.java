@@ -155,6 +155,8 @@ package com.example.helloworld;
         					  
         					  public boolean visit(PostfixExpression node) 
         					  {
+        						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
+        						  System.out.println(lineNumber);
         						  System.out.println("Before: " + node.getOperand().toString() + " " + node.getOperator().toString());
         						  //System.out.println(node.getStartPosition());
         						  //System.out.println(node.getLength());
