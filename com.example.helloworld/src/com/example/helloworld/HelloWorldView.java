@@ -156,6 +156,11 @@ package com.example.helloworld;
         					  public boolean visit(PostfixExpression node) 
         					  {
         						  System.out.println(node.getOperand().toString() + " " + node.getOperator().toString());
+        						  System.out.println(node.getStartPosition());
+        						  System.out.println(node.getLength());
+        						  //node.setOperator(operator);
+        						  
+        						  System.out.println("bbbbbbbbbbbbbbbb");
         						  return true; 
         					  }
         					  
