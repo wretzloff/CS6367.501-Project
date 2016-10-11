@@ -9,7 +9,8 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.*;
 	import org.eclipse.jdt.core.dom.*;
 	import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
-	import org.eclipse.text.edits.TextEdit;
+	import org.eclipse.jface.text.Document;
+	import org.eclipse.text.edits.*;
 	//import org.eclipse.jdt.launching.JavaRuntime;
 
    public class HelloWorldView extends ViewPart 
@@ -170,7 +171,12 @@ package com.example.helloworld;
         				  });
         	    	  }
     				  
-    				  
+    				  TextEdit edits = rewriter.rewriteAST();
+    				  // apply the text edits to the compilation unit
+    				  Document document = new Document(iCompilationUnit.getSource());
+    				  //edits.apply(document);
+    				  // this is the code for adding statements
+    				  //unit.getBuffer().setContents(document.get());
     				  
     	    	  }
     			  
