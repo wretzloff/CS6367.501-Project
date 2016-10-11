@@ -8,8 +8,8 @@ package com.example.helloworld;
 	import org.eclipse.core.runtime.*;
 	import org.eclipse.jdt.core.*;
 	import org.eclipse.jdt.core.dom.*;
-	import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
-	import org.eclipse.jface.text.Document;
+	import org.eclipse.jdt.core.dom.rewrite.*;
+	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	//import org.eclipse.jdt.launching.JavaRuntime;
 
