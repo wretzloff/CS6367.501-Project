@@ -9,6 +9,7 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.*;
 	import org.eclipse.jdt.core.dom.*;
 	import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+	import org.eclipse.text.edits.TextEdit;
 	//import org.eclipse.jdt.launching.JavaRuntime;
 
    public class HelloWorldView extends ViewPart 
@@ -147,11 +148,11 @@ package com.example.helloworld;
     					  Block methodBody = methodDeclaration.getBody();
     					  methodBody.accept(new ASTVisitor() 
         				  {
-        					  public boolean visit(MethodInvocation node) 
+        					  /*public boolean visit(MethodInvocation node) 
         					  {
         						  System.out.println(node.getName().toString());
         						  return true; 
-        					  }
+        					  }*/
         					  
         					  public boolean visit(PostfixExpression node) 
         					  {
