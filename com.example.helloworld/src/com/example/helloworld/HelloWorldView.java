@@ -196,4 +196,45 @@ package com.example.helloworld;
           parser.setResolveBindings(true);
           return (CompilationUnit) parser.createAST(null); // parse
       }
+      
+      private void AddStatements() throws MalformedTreeException, BadLocationException, CoreException {
+    	  
+  		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("testAddComments");
+  		IJavaProject javaProject = JavaCore.create(project);
+  		IPackageFragment package1 = javaProject.getPackageFragments()[0];
+   
+  		// get first compilation unit
+  		ICompilationUnit unit = package1.getCompilationUnits()[0];
+   
+  		// parse compilation unit
+  		CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(unit);
+   
+  		// create a ASTRewrite
+  		AST ast = astRoot.getAST();
+  		ASTRewrite rewriter = ASTRewrite.create(ast);
+   
+  		// for getting insertion position
+  		TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+  		MethodDeclaration methodDecl = typeDecl.getMethods()[0];
+  		Block block = methodDecl.getBody();
+   
+  		// create new statements for insertion
+  		MethodInvocation newInvocation = ast.newMethodInvocation();
+  		newInvocation.setName(ast.newSimpleName("add"));
+  		Statement newStatement = ast.newExpressionStatement(newInvocation);
+   
+  		//create ListRewrite
+  		ListRewrite listRewrite = rewriter.getListRewrite(block, Block.STATEMENTS_PROPERTY);
+  		listRewrite.insertFirst(newStatement, null);
+   
+  		TextEdit edits = rewriter.rewriteAST();
+   
+  		// apply the text edits to the compilation unit
+  		Document document = new Document(unit.getSource());
+   
+  		edits.apply(document);
+   
+  		// this is the code for adding statements
+  		unit.getBuffer().setContents(document.get());
+  	}
    }
