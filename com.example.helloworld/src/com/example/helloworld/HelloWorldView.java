@@ -114,71 +114,17 @@ package com.example.helloworld;
     		  {
     			  //Make a copy of the project
     			  copyProject(projectName);
-				
-    			  //Get a handle to the copy
-    			  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName + "_copy");
-    			  textStatusArea.append("New project name: " + projectCopy.getName() + "\n");
-		    	
-    			  //Create an AST for the project
-    			  IJavaProject javaProject = JavaCore.create(projectCopy);
-    			  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-    			  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-    			  //Each ICompilationUnit represents a class
-    			  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
-    	    	  {
-    				  //String source = iCompilationUnit.getSource();
-    				  //System.out.println(source + "\n");
-    				  
-    				  //Parse a CompilationUnit from the ICompilationUnit
-    				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
-    				  AST ast = astRoot.getAST();
-    				  ASTRewrite rewriter = ASTRewrite.create(ast);
-    				  //Each TypeDeclaration also seems to represent a class
-    				  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-    				  //Type superclassType = typeDecl.getSuperclassType();
-    				  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
-    				  //Get all methods from the class
-    				  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
-    				  for (MethodDeclaration methodDeclaration : methodDeclarations) 
-        	    	  {
-    					  Block methodBody = methodDeclaration.getBody();
-    					  methodBody.accept(new ASTVisitor() 
-        				  {
-        					  /*public boolean visit(MethodInvocation node) 
-        					  {
-        						  System.out.println(node.getName().toString());
-        						  return true; 
-        					  }*/
-        					  
-        					  public boolean visit(PostfixExpression node) 
-        					  {
-        						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
-        						  System.out.println(lineNumber);
-        						  System.out.println("Before: " + node.getOperand().toString() + " " + node.getOperator().toString());
-        						  //System.out.println(node.getStartPosition());
-        						  //System.out.println(node.getLength());
-        						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-        						  System.out.println("After: " + node.getOperand().toString() + " " + node.getOperator().toString());
-        						  
-        						  return true; 
-        					  }
-        					  
-        				  });
-        	    	  }
-    				  
-    				  TextEdit edits = rewriter.rewriteAST();
-    				  // apply the text edits to the compilation unit
-    				  Document document = new Document(iCompilationUnit.getSource());
-    				  //edits.apply(document);
-    				  // this is the code for adding statements
-    				  //unit.getBuffer().setContents(document.get());
-    				  
-    	    	  }
-    			  
+    			  changeIncrementsToDecrements(projectName); //+ "_copy");  
     		  } 
     		  catch (CoreException e) 
     		  {
 				//TODO Auto-generated catch block
+				e.printStackTrace();
+    		  } catch (MalformedTreeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+    		  } catch (BadLocationException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
     		  }
     	  }
@@ -195,6 +141,69 @@ package com.example.helloworld;
           parser.setSource(unit);
           parser.setResolveBindings(true);
           return (CompilationUnit) parser.createAST(null); // parse
+      }
+      
+      private void changeIncrementsToDecrements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
+      {
+    	  //Get a handle to the copy
+		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		  textStatusArea.append("New project name: " + projectCopy.getName() + "\n");
+    	
+		  //Create an AST for the project
+		  IJavaProject javaProject = JavaCore.create(projectCopy);
+		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+		  //Each ICompilationUnit represents a class
+		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
+    	  {
+			  //String source = iCompilationUnit.getSource();
+			  //System.out.println(source + "\n");
+			  
+			  //Parse a CompilationUnit from the ICompilationUnit
+			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+			  AST ast = astRoot.getAST();
+			  ASTRewrite rewriter = ASTRewrite.create(ast);
+			  //Each TypeDeclaration also seems to represent a class
+			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+			  //Type superclassType = typeDecl.getSuperclassType();
+			  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
+			  //Get all methods from the class
+			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
+			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
+	    	  {
+				  Block methodBody = methodDeclaration.getBody();
+				  methodBody.accept(new ASTVisitor() 
+				  {
+					  /*public boolean visit(MethodInvocation node) 
+					  {
+						  System.out.println(node.getName().toString());
+						  return true; 
+					  }*/
+					  
+					  public boolean visit(PostfixExpression node) 
+					  {
+						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
+						  System.out.println(lineNumber);
+						  System.out.println("Before: " + node.getOperand().toString() + " " + node.getOperator().toString());
+						  //System.out.println(node.getStartPosition());
+						  //System.out.println(node.getLength());
+						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+						  System.out.println("After: " + node.getOperand().toString() + " " + node.getOperator().toString());
+						  
+						  return true; 
+					  }
+					  
+				  });
+	    	  }
+			  
+			  TextEdit edits = rewriter.rewriteAST();
+			  // apply the text edits to the compilation unit
+			  Document document = new Document(iCompilationUnit.getSource());
+			  //edits.apply(document);
+			  // this is the code for adding statements
+			  //unit.getBuffer().setContents(document.get());
+			  
+    	  }
       }
       
       private void addStatements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
