@@ -114,7 +114,8 @@ package com.example.helloworld;
     		  {
     			  //Make a copy of the project
     			  copyProject(projectName);
-    			  changeIncrementsToDecrements(projectName); //+ "_copy");  
+    			  changeIncrementsToDecrements(projectName); //+ "_copy"); 
+    			  addStatements(projectName);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -173,13 +174,7 @@ package com.example.helloworld;
 	    	  {
 				  Block methodBody = methodDeclaration.getBody();
 				  methodBody.accept(new ASTVisitor() 
-				  {
-					  /*public boolean visit(MethodInvocation node) 
-					  {
-						  System.out.println(node.getName().toString());
-						  return true; 
-					  }*/
-					  
+				  {  
 					  public boolean visit(PostfixExpression node) 
 					  {
 						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
@@ -194,58 +189,60 @@ package com.example.helloworld;
 					  }
 					  
 				  });
-	    	  }
+	    	  }//end for loop
 			  
 			  TextEdit edits = rewriter.rewriteAST();
 			  // apply the text edits to the compilation unit
 			  Document document = new Document(iCompilationUnit.getSource());
 			  //edits.apply(document);
 			  // this is the code for adding statements
-			  //unit.getBuffer().setContents(document.get());
+			  //iCompilationUnit.getBuffer().setContents(document.get());
 			  
     	  }
       }
       
       private void addStatements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
       {
-    	System.out.println("Hello from AddStatements(): " + projectName);
-    	IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-  		IJavaProject javaProject = JavaCore.create(project);
-  		IPackageFragment package1 = javaProject.getPackageFragments()[0];
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin AddStatements(): " + projectName);
+    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    	  IJavaProject javaProject = JavaCore.create(project);
+    	  IPackageFragment package1 = javaProject.getPackageFragments()[0];
    
-  		// get first compilation unit
-  		ICompilationUnit unit = package1.getCompilationUnits()[0];
+    	  // get first compilation unit
+    	  ICompilationUnit unit = package1.getCompilationUnits()[0];
    
-  		// parse compilation unit
-  		CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(unit);
+    	  // parse compilation unit
+    	  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(unit);
    
-  		// create a ASTRewrite
-  		AST ast = astRoot.getAST();
-  		ASTRewrite rewriter = ASTRewrite.create(ast);
+    	  // create a ASTRewrite
+    	  AST ast = astRoot.getAST();
+    	  ASTRewrite rewriter = ASTRewrite.create(ast);
    
-  		// for getting insertion position
-  		TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-  		MethodDeclaration methodDecl = typeDecl.getMethods()[0];
-  		Block block = methodDecl.getBody();
-  		System.out.println(block.toString());
-  		// create new statements for insertion
-  		MethodInvocation newInvocation = ast.newMethodInvocation();
-  		newInvocation.setName(ast.newSimpleName("add"));
-  		Statement newStatement = ast.newExpressionStatement(newInvocation);
-  		System.out.println(newStatement);
-  		
-  		//create ListRewrite
-  		ListRewrite listRewrite = rewriter.getListRewrite(block, Block.STATEMENTS_PROPERTY);
-  		listRewrite.insertFirst(newStatement, null);
+    	  // for getting insertion position
+    	  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+    	  MethodDeclaration methodDecl = typeDecl.getMethods()[0];
+    	  Block block = methodDecl.getBody();
+    	  //System.out.println(block.toString());
+    	  // create new statements for insertion
+    	  MethodInvocation newInvocation = ast.newMethodInvocation();
+    	  newInvocation.setName(ast.newSimpleName("add"));
+    	  Statement newStatement = ast.newExpressionStatement(newInvocation);
+    	  //System.out.println(newStatement);
+    	  
+    	  //create ListRewrite
+    	  ListRewrite listRewrite = rewriter.getListRewrite(block, Block.STATEMENTS_PROPERTY);
+    	  listRewrite.insertFirst(newStatement, null);
    
-  		TextEdit edits = rewriter.rewriteAST();
+    	  TextEdit edits = rewriter.rewriteAST();
    
-  		// apply the text edits to the compilation unit
-  		Document document = new Document(unit.getSource());
-  		edits.apply(document);
+    	  // apply the text edits to the compilation unit
+    	  Document document = new Document(unit.getSource());
+    	  edits.apply(document);
    
-  		// this is the code for adding statements
-  		unit.getBuffer().setContents(document.get());
-  		System.out.println("--------------------------------------------------------------------------------------");
+    	  // this is the code for adding statements
+    	  unit.getBuffer().setContents(document.get());
+    	  System.out.println("End AddStatements(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
   	}
    }
