@@ -146,6 +146,8 @@ package com.example.helloworld;
       
       private void changeIncrementsToDecrements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
       {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin changeIncrementsToDecrements(): " + projectName);
     	  //Get a handle to the copy
 		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  textStatusArea.append("New project name: " + projectCopy.getName() + "\n");
@@ -197,7 +199,8 @@ package com.example.helloworld;
 			  //edits.apply(document);
 			  // this is the code for adding statements
 			  //iCompilationUnit.getBuffer().setContents(document.get());
-			  
+			  System.out.println("End changeIncrementsToDecrements(): " + projectName);
+	    	  System.out.println("--------------------------------------------------------------------");
     	  }
       }
       
