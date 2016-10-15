@@ -148,15 +148,13 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin changeIncrementsToDecrements(): " + projectName);
-    	  //Get a handle to the copy
 		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		  textStatusArea.append("New project name: " + projectCopy.getName() + "\n");
-    	
-		  //Create an AST for the project
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+		  
+		  //Get the compilation units. Each ICompilationUnit represents a class.
 		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-		  //Each ICompilationUnit represents a class
+		  
 		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
     	  {
 			  //String source = iCompilationUnit.getSource();
@@ -196,9 +194,9 @@ package com.example.helloworld;
 			  TextEdit edits = rewriter.rewriteAST();
 			  // apply the text edits to the compilation unit
 			  Document document = new Document(iCompilationUnit.getSource());
-			  //edits.apply(document);
+			  edits.apply(document);
 			  // this is the code for adding statements
-			  //iCompilationUnit.getBuffer().setContents(document.get());
+			  iCompilationUnit.getBuffer().setContents(document.get());
 			  System.out.println("End changeIncrementsToDecrements(): " + projectName);
 	    	  System.out.println("--------------------------------------------------------------------");
     	  }
