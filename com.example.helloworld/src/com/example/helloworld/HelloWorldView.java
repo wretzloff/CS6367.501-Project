@@ -185,24 +185,12 @@ package com.example.helloworld;
 						  //node.setOperator(PostfixExpression.Operator.toOperator("--"));
 						  //System.out.println("After: " + node.getOperand().toString() + " " + node.getOperator().toString());
 						  
-						  MethodInvocation newInvocation = ast.newMethodInvocation();
-				    	  newInvocation.setName(ast.newSimpleName("add123"));
-				    	  Statement newNode = ast.newExpressionStatement(newInvocation);
-						  
-						  //Option 1
-						  //PostfixExpression newPostfixExpression = ast.newPostfixExpression();
-						  //newPostfixExpression.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  //Statement newNode = ast.newExpressionStatement(newPostfixExpression);
-						  
-						  //Option 2 
-						  //System.out.println("original node: " + node.getOperand().toString() + " " + node.getOperator().toString());
-						  //PostfixExpression newPostfixExpression = (PostfixExpression)rewriter.createCopyTarget(node);
-						  //System.out.println("new node: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
-						  //newPostfixExpression.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  //newPostfixExpression.setOperand(node.getOperand());
-						  //System.out.println("new node after change: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
-						  //Statement newNode = ast.newExpressionStatement(newPostfixExpression);
-						  
+						  PostfixExpression newPostfixExpression = ast.newPostfixExpression();
+						  System.out.println("new node: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
+						  newPostfixExpression.setOperator(PostfixExpression.Operator.toOperator("--"));
+						  System.out.println("modified node1: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
+						  newPostfixExpression.setOperand((Expression)rewriter.createCopyTarget(node.getOperand()));
+						  Statement newNode = ast.newExpressionStatement(newPostfixExpression);
 						  
 				    	  rewriter.replace(node, newNode, null);
 						  return true; 
