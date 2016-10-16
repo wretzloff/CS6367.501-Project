@@ -113,8 +113,8 @@ package com.example.helloworld;
     		  try 
     		  {
     			  //Make a copy of the project
-    			  //copyProject(projectName);
-    			  changeIncrementsToDecrements(projectName); //+ "_copy");
+    			  copyProject(projectName);
+    			  changeIncrementsToDecrements(projectName + "_copy");
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -156,8 +156,7 @@ package com.example.helloworld;
 		  
 		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
     	  {
-			  //String source = iCompilationUnit.getSource();
-			  //System.out.println(source + "\n");
+			  iCompilationUnit.becomeWorkingCopy(new NullProgressMonitor());
 			  
 			  //Parse a CompilationUnit from the ICompilationUnit
 			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
@@ -192,13 +191,13 @@ package com.example.helloworld;
 	    	  }//end for loop
 			  
 			  TextEdit edits = rewriter.rewriteAST();
-			  Document document = new Document(iCompilationUnit.getSource());
-			  edits.apply(document);
-			  iCompilationUnit.getBuffer().setContents(document.get());
+			  //Document document = new Document(iCompilationUnit.getSource());
+			  //edits.apply(document);
+			  //iCompilationUnit.getBuffer().setContents(document.get());
+			  iCompilationUnit.applyTextEdit(rewriter.rewriteAST(), new NullProgressMonitor());
+			  iCompilationUnit.commitWorkingCopy(false, new NullProgressMonitor());
     	  }
 		  System.out.println("End changeIncrementsToDecrements(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
       }//end changeIncrementsToDecrements()
-      
-      
-   }
+   }//end class
