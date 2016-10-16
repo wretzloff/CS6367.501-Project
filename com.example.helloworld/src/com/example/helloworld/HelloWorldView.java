@@ -114,8 +114,7 @@ package com.example.helloworld;
     		  {
     			  //Make a copy of the project
     			  //copyProject(projectName);
-    			  changeIncrementsToDecrements(projectName); //+ "_copy"); 
-    			  //addStatements(projectName);
+    			  changeIncrementsToDecrements(projectName); //+ "_copy");
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -177,18 +176,11 @@ package com.example.helloworld;
 				  {  
 					  public boolean visit(PostfixExpression node) 
 					  {
-						  //int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
-						  //System.out.println(lineNumber);
-						  //System.out.println("Before: " + node.getOperand().toString() + " " + node.getOperator().toString());
-						  //System.out.println(node.getStartPosition());
-						  //System.out.println(node.getLength());
-						  //node.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  //System.out.println("After: " + node.getOperand().toString() + " " + node.getOperator().toString());
+						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
+						  System.out.println("Expression (Line " + lineNumber + "): " + node);
 						  
 						  PostfixExpression newPostfixExpression = ast.newPostfixExpression();
-						  System.out.println("new node: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
 						  newPostfixExpression.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  System.out.println("modified node1: " + newPostfixExpression.getOperand().toString() + " " + newPostfixExpression.getOperator().toString());
 						  newPostfixExpression.setOperand((Expression)rewriter.createCopyTarget(node.getOperand()));
 						  Statement newNode = ast.newExpressionStatement(newPostfixExpression);
 						  
@@ -208,50 +200,7 @@ package com.example.helloworld;
 			  System.out.println("End changeIncrementsToDecrements(): " + projectName);
 	    	  System.out.println("--------------------------------------------------------------------");
     	  }
-      }
+      }//end changeIncrementsToDecrements()
       
-      private void addStatements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
-      {
-    	  System.out.println("--------------------------------------------------------------------");
-    	  System.out.println("Begin AddStatements(): " + projectName);
-    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-    	  IJavaProject javaProject = JavaCore.create(project);
-    	  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-   
-    	  // get first compilation unit
-    	  ICompilationUnit unit = package1.getCompilationUnits()[0];
-   
-    	  // parse compilation unit
-    	  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(unit);
-   
-    	  // create a ASTRewrite
-    	  AST ast = astRoot.getAST();
-    	  ASTRewrite rewriter = ASTRewrite.create(ast);
-   
-    	  // for getting insertion position
-    	  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-    	  MethodDeclaration methodDecl = typeDecl.getMethods()[0];
-    	  Block block = methodDecl.getBody();
-    	  //System.out.println(block.toString());
-    	  // create new statements for insertion
-    	  MethodInvocation newInvocation = ast.newMethodInvocation();
-    	  newInvocation.setName(ast.newSimpleName("add"));
-    	  Statement newStatement = ast.newExpressionStatement(newInvocation);
-    	  //System.out.println(newStatement);
-    	  
-    	  //create ListRewrite
-    	  ListRewrite listRewrite = rewriter.getListRewrite(block, Block.STATEMENTS_PROPERTY);
-    	  listRewrite.insertFirst(newStatement, null);
-   
-    	  TextEdit edits = rewriter.rewriteAST();
-   
-    	  // apply the text edits to the compilation unit
-    	  Document document = new Document(unit.getSource());
-    	  edits.apply(document);
-   
-    	  // this is the code for adding statements
-    	  unit.getBuffer().setContents(document.get());
-    	  System.out.println("End AddStatements(): " + projectName);
-    	  System.out.println("--------------------------------------------------------------------");
-  	}
+      
    }
