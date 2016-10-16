@@ -195,9 +195,9 @@ package com.example.helloworld;
 			  Document document = new Document(iCompilationUnit.getSource());
 			  edits.apply(document);
 			  iCompilationUnit.getBuffer().setContents(document.get());
-			  System.out.println("End changeIncrementsToDecrements(): " + projectName);
-	    	  System.out.println("--------------------------------------------------------------------");
     	  }
+		  System.out.println("End changeIncrementsToDecrements(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
       }//end changeIncrementsToDecrements()
       
       
