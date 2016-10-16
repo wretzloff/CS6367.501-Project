@@ -115,7 +115,7 @@ package com.example.helloworld;
     			  //Make a copy of the project
     			  copyProject(projectName);
     			  changeIncrementsToDecrements(projectName); //+ "_copy"); 
-    			  addStatements(projectName);
+    			  //addStatements(projectName);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -185,6 +185,11 @@ package com.example.helloworld;
 						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
 						  System.out.println("After: " + node.getOperand().toString() + " " + node.getOperator().toString());
 						  
+						  MethodInvocation newInvocation = ast.newMethodInvocation();
+				    	  newInvocation.setName(ast.newSimpleName("add123"));
+				    	  Statement newNode = ast.newExpressionStatement(newInvocation);
+				    	  rewriter.replace(node, newNode, null);
+				    	  
 						  return true; 
 					  }
 					  
