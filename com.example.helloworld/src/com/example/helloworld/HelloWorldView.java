@@ -179,10 +179,10 @@ package com.example.helloworld;
 						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
 						  System.out.println("Expression (Line " + lineNumber + "): " + node);
 						  
-						  PostfixExpression newPostfixExpression = ast.newPostfixExpression();
-						  newPostfixExpression.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  newPostfixExpression.setOperand((Expression)rewriter.createCopyTarget(node.getOperand()));
-						  Statement newNode = ast.newExpressionStatement(newPostfixExpression);
+						  //Build a new node from scratch to replace the current one
+						  PostfixExpression newNode = ast.newPostfixExpression();
+						  newNode.setOperator(PostfixExpression.Operator.toOperator("--"));
+						  newNode.setOperand((Expression)rewriter.createCopyTarget(node.getOperand()));
 						  
 				    	  rewriter.replace(node, newNode, null);
 						  return true; 
@@ -192,10 +192,8 @@ package com.example.helloworld;
 	    	  }//end for loop
 			  
 			  TextEdit edits = rewriter.rewriteAST();
-			  // apply the text edits to the compilation unit
 			  Document document = new Document(iCompilationUnit.getSource());
 			  edits.apply(document);
-			  // this is the code for adding statements
 			  iCompilationUnit.getBuffer().setContents(document.get());
 			  System.out.println("End changeIncrementsToDecrements(): " + projectName);
 	    	  System.out.println("--------------------------------------------------------------------");
