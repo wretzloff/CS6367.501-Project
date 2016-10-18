@@ -112,19 +112,13 @@ package com.example.helloworld;
     		  textStatusArea.append("Begin testing project: " + projectName + "\n");
     		  try 
     		  {
-    			  //Make a copy of the project
-    			  copyProject(projectName);
-    			  changeIncrementsToDecrements(projectName + "_copy");
+    			  createMutationPlan(projectName);
+    			  //copyProject(projectName);
+    			  //changeIncrementsToDecrements(projectName + "_copy");
     		  } 
     		  catch (CoreException e) 
     		  {
 				//TODO Auto-generated catch block
-				e.printStackTrace();
-    		  } catch (MalformedTreeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-    		  } catch (BadLocationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
     		  }
     	  }
@@ -174,10 +168,7 @@ package com.example.helloworld;
 				  methodBody.accept(new ASTVisitor() 
 				  {  
 					  public boolean visit(PostfixExpression node) 
-					  {
-						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
-						  System.out.println("Expression (Line " + lineNumber + "): " + node);
-						  
+					  {						  
 						  //Build a new node from scratch to replace the current one
 						  PostfixExpression newNode = ast.newPostfixExpression();
 						  newNode.setOperator(PostfixExpression.Operator.toOperator("--"));
@@ -200,4 +191,44 @@ package com.example.helloworld;
 		  System.out.println("End changeIncrementsToDecrements(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
       }//end changeIncrementsToDecrements()
+      
+      private void createMutationPlan(String projectName) throws CoreException
+      {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin createMutationPlan(): " + projectName);
+    	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		  IJavaProject javaProject = JavaCore.create(projectCopy);
+		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+		  
+		  //Get the compilation units. Each ICompilationUnit represents a class.
+		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+		  
+		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
+    	  {
+			  
+			  //Parse a CompilationUnit from the ICompilationUnit
+			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+			  AST ast = astRoot.getAST();
+			  ASTRewrite rewriter = ASTRewrite.create(ast);
+			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
+			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
+	    	  {
+				  Block methodBody = methodDeclaration.getBody();
+				  methodBody.accept(new ASTVisitor() 
+				  {  
+					  public boolean visit(PostfixExpression node) 
+					  {
+						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
+						  System.out.println("Expression (Line " + lineNumber + "): " + node);
+						  return true; 
+					  }
+					  
+				  });
+	    	  }//end for loop
+			  
+    	  }
+    	  System.out.println("End createMutationPlan(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
+      }
    }//end class
