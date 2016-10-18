@@ -113,8 +113,6 @@ package com.example.helloworld;
     		  try 
     		  {
     			  createMutationPlan(projectName);
-    			  //copyProject(projectName);
-    			  //changeIncrementsToDecrements(projectName + "_copy");
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -196,6 +194,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
+    	  textStatusArea.append("Building mutation plan for project: " + projectName + "\n");
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
@@ -219,8 +218,14 @@ package com.example.helloworld;
 				  {  
 					  public boolean visit(PostfixExpression node) 
 					  {
-						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());// - 1;
-						  System.out.println("Expression (Line " + lineNumber + "): " + node);
+						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
+						  System.out.println("Line " + lineNumber);
+						  System.out.println("StartPosition: " + node.getStartPosition());
+						  System.out.println("Length:" + node.getLength());
+						  System.out.println("Current expression: " + node);
+						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+						  System.out.println("New expression: " + node);
+						  System.out.println();
 						  return true; 
 					  }
 					  
