@@ -3,7 +3,9 @@ package com.example.helloworld;
 	import org.eclipse.swt.widgets.*;
 	import org.eclipse.swt.SWT;
 	import org.eclipse.ui.part.ViewPart;
-	import java.util.*;
+
+import java.io.File;
+import java.util.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
 	import org.eclipse.jdt.core.*;
@@ -112,6 +114,7 @@ package com.example.helloworld;
     		  textStatusArea.append("Begin testing project: " + projectName + "\n");
     		  try 
     		  {
+    			  String directoryPath = createFolderForResults(projectName);
     			  createMutationPlan(projectName);
     		  } 
     		  catch (CoreException e) 
@@ -190,6 +193,34 @@ package com.example.helloworld;
     	  System.out.println("--------------------------------------------------------------------");
       }//end changeIncrementsToDecrements()
       
+      
+      private String createFolderForResults(String projectName)
+      {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin createFolderForResults(): " + projectName);
+    	  String directoryPath = System.getProperty("user.dir") + "\\MutationTesting_" + projectName;
+    	  File f = new File(directoryPath);
+    	  try
+    	  {
+    	      if(f.mkdir()) 
+    	      { 
+    	    	  System.out.println("Created directory: " + directoryPath);
+    	      } 
+    	      else 
+    	      {
+    	    	  System.out.println("Failed to create directory: " + directoryPath);
+    	      }
+    	  } 
+    	  catch(Exception e)
+    	  {
+    	      e.printStackTrace();
+    	  } 
+		  
+    	  System.out.println("End createFolderForResults(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
+    	  return directoryPath;
+      }
+      
       private void createMutationPlan(String projectName) throws CoreException
       {
     	  System.out.println("--------------------------------------------------------------------");
@@ -198,7 +229,6 @@ package com.example.helloworld;
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-		  
 		  //Get the compilation units. Each ICompilationUnit represents a class.
 		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
 		  
