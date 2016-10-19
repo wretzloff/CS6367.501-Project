@@ -267,9 +267,9 @@ package com.example.helloworld;
     						  sb.append("***Line " + lineNumber + "***\n");
     						  sb.append("StartPosition: " + node.getStartPosition() + "\n");
     						  sb.append("Length:" + node.getLength() + "\n");
-    						  sb.append("Current expression: " + node + "\n");
+    						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-    						  sb.append("New expression: " + node + "\n");
+    						  sb.append("New source: " + node + "\n");
     						  sb.append("\n");
     						  return true; 
     					  }
