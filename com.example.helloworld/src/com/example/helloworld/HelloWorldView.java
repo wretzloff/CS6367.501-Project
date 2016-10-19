@@ -71,7 +71,14 @@ package com.example.helloworld;
     		  try 
     		  {
     			  String directoryPath = createFolderForResults(projectName);
-    			  ArrayList<String> mutationPlan = createMutationPlan(projectName, directoryPath);
+    			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
+    			  
+    			  String mutationPlan = mutationPlans.get(0);
+    			  String[] splits = mutationPlan.split("\n");
+    			  for(String split : splits)
+    			  {
+    				  System.out.println(split);
+    			  }  
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -267,7 +274,7 @@ package com.example.helloworld;
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
     						  sb.append("***Line " + lineNumber + "***\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
-    						  sb.append("Length:" + node.getLength() + "\n");
+    						  sb.append("Length: " + node.getLength() + "\n");
     						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
     						  sb.append("New source: " + node + "\n");
