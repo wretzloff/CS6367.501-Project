@@ -72,20 +72,15 @@ package com.example.helloworld;
     		  {
     			  String directoryPath = createFolderForResults(projectName);
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
-    			  
+    			   
     			  String mutationPlan = mutationPlans.get(0);
     			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 0));
 				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 1));
 				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
 				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 3);
 				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
+				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource);
 				  
-				  System.out.println(mutationPlan);
-				  System.out.println(lineNumber);
-				  System.out.println(startPosition);
-				  System.out.println(length);
-				  System.out.println(currentSource);
-				  System.out.println(newSource);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -98,6 +93,11 @@ package com.example.helloworld;
     		  textStatusArea.append("Please make a valid selection.\n");
     	  }  
       }//end startButtonPressed()
+      
+      private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource)
+      {
+    	  
+      }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
       {
