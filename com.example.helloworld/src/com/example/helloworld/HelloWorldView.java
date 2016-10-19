@@ -113,7 +113,7 @@ package com.example.helloworld;
     		  try 
     		  {
     			  String directoryPath = createFolderForResults(projectName);
-    			  createMutationPlan(projectName, directoryPath);
+    			  ArrayList<String> mutationPlan = createMutationPlan(projectName, directoryPath);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -230,15 +230,15 @@ package com.example.helloworld;
     	  return directoryPath;
       }
       
-      private String createMutationPlan(String projectName, String directoryPath) throws CoreException
+      private ArrayList<String> createMutationPlan(String projectName, String directoryPath) throws CoreException
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
     	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
     	  textStatusArea.append("Building mutation plan: " + mutationPlanPath + "\n");
     	  
-		  //We'll build the mutation plan as a String.
-		  StringBuilder sb = new StringBuilder();
+		  //We'll build the mutation plan as a list of Strings.
+		  ArrayList<String> mutations = new ArrayList<String>();
 		  
     	  try 
     	  {  
@@ -263,6 +263,7 @@ package com.example.helloworld;
     				  {  
     					  public boolean visit(PostfixExpression node) 
     					  {
+    						  StringBuilder sb = new StringBuilder();
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
     						  sb.append("***Line " + lineNumber + "***\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
@@ -271,16 +272,20 @@ package com.example.helloworld;
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
     						  sb.append("New source: " + node + "\n");
     						  sb.append("\n");
+    						  mutations.add(sb.toString());
     						  return true; 
     					  }//end visit()
     				  });
     	    	  }//end for loop
-    			  
         	  }//end for loop
     		  
     		  //Create a file and print the plan
     		  PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
-    		  writer.print(sb.toString());
+    		  for(String mutation : mutations)
+    		  {
+        		  writer.print(mutation);    			  
+    		  }
+    		  
     		  writer.close();
     	  } 
     	  catch (IOException e) 
@@ -291,6 +296,6 @@ package com.example.helloworld;
     	  
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
-    	  return sb.toString();
+    	  return mutations;
       }
    }//end class
