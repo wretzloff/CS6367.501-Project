@@ -265,7 +265,7 @@ package com.example.helloworld;
     					  {
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
     						  sb.append("***Line " + lineNumber + "***\n");
-    						  sb.append("StartPosition: " + node.getStartPosition() + "\n");
+    						  sb.append("Start Position: " + node.getStartPosition() + "\n");
     						  sb.append("Length:" + node.getLength() + "\n");
     						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
@@ -279,12 +279,10 @@ package com.example.helloworld;
     			  
         	  }//end for loop
     		  
-    		  
     		  //Create a file and print the plan
     		  PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
     		  writer.print(sb.toString());
     		  writer.close();
-    		  
     	  } 
     	  catch (IOException e) 
     	  {
