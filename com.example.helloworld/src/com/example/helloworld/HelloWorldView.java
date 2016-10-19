@@ -4,8 +4,8 @@ package com.example.helloworld;
 	import org.eclipse.swt.SWT;
 	import org.eclipse.ui.part.ViewPart;
 
-import java.io.File;
-import java.util.*;
+	import java.io.File;
+	import java.util.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
 	import org.eclipse.jdt.core.*;
@@ -13,7 +13,6 @@ import java.util.*;
 	import org.eclipse.jdt.core.dom.rewrite.*;
 	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
-	//import org.eclipse.jdt.launching.JavaRuntime;
 
    public class HelloWorldView extends ViewPart 
    {
