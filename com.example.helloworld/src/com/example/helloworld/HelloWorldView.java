@@ -63,6 +63,28 @@ package com.example.helloworld;
          // you would decide which one gets the focus.
       }
       
+      public void startButtonPressed()
+      {
+    	  if(comboProjectsList.getSelectionIndex() >= 0)
+    	  {
+    		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
+    		  try 
+    		  {
+    			  String directoryPath = createFolderForResults(projectName);
+    			  ArrayList<String> mutationPlan = createMutationPlan(projectName, directoryPath);
+    		  } 
+    		  catch (CoreException e) 
+    		  {
+				//TODO Auto-generated catch block
+				e.printStackTrace();
+    		  }
+    	  }
+    	  else
+    	  {
+    		  textStatusArea.append("Please make a valid selection.\n");
+    	  }  
+      }//end startButtonPressed()
+      
       //Given a project name, this method will create a copy of that project.
       public IProject copyProject(String projectName) throws CoreException 
       {
@@ -104,28 +126,6 @@ package com.example.helloworld;
     	  projectsList.toArray(tempProjectsArray);
     	  return tempProjectsArray;      
       }//end getProjectNames()
-      
-      public void startButtonPressed()
-      {
-    	  if(comboProjectsList.getSelectionIndex() >= 0)
-    	  {
-    		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
-    		  try 
-    		  {
-    			  String directoryPath = createFolderForResults(projectName);
-    			  ArrayList<String> mutationPlan = createMutationPlan(projectName, directoryPath);
-    		  } 
-    		  catch (CoreException e) 
-    		  {
-				//TODO Auto-generated catch block
-				e.printStackTrace();
-    		  }
-    	  }
-    	  else
-    	  {
-    		  textStatusArea.append("Please make a valid selection.\n");
-    	  }  
-      }//end startButtonPressed()
       
       private CompilationUnit parse_iCompilation_Unit_To_CompilationUnit(ICompilationUnit unit) 
       {
