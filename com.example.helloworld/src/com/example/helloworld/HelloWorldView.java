@@ -81,11 +81,11 @@ package com.example.helloworld;
 				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
 				  
 				  System.out.println(mutationPlan);
-				  System.out.println("aa: "+ lineNumber);
-				  System.out.println("aa: "+ startPosition);
-				  System.out.println("aa: "+ length);
-				  System.out.println("aa: "+ currentSource);
-				  System.out.println("aa: "+ newSource);
+				  System.out.println(lineNumber);
+				  System.out.println(startPosition);
+				  System.out.println(length);
+				  System.out.println(currentSource);
+				  System.out.println(newSource);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -109,7 +109,7 @@ package com.example.helloworld;
       }
       
       //Given a project name, this method will create a copy of that project.
-      public IProject copyProject(String projectName) throws CoreException 
+      private IProject copyProject(String projectName) throws CoreException 
       {
     	    IProgressMonitor m = new NullProgressMonitor();
     	    //IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -132,7 +132,7 @@ package com.example.helloworld;
       }//end copyProject()
       
       //Return an array of the names of the projects available in the workspace.
-      public String[] getProjectNames()
+      private String[] getProjectNames()
       {
     	  //Create a temporary ArrayList to hold the names of the available projects
     	  ArrayList<String> projectsList = new ArrayList<String>();
