@@ -230,20 +230,18 @@ package com.example.helloworld;
     	  return directoryPath;
       }
       
-      private void createMutationPlan(String projectName, String directoryPath) throws CoreException
+      private String createMutationPlan(String projectName, String directoryPath) throws CoreException
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
     	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
-    	  
     	  textStatusArea.append("Building mutation plan: " + mutationPlanPath + "\n");
     	  
+		  //We'll build the mutation plan as a String.
+		  StringBuilder sb = new StringBuilder();
+		  
     	  try 
-    	  {
-    		  PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
-    		  
-    		  
-    		  
+    	  {  
     		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     		  IJavaProject javaProject = JavaCore.create(projectCopy);
     		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
@@ -252,7 +250,6 @@ package com.example.helloworld;
     		  
     		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
         	  {
-    			  
     			  //Parse a CompilationUnit from the ICompilationUnit
     			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
     			  AST ast = astRoot.getAST();
@@ -267,13 +264,13 @@ package com.example.helloworld;
     					  public boolean visit(PostfixExpression node) 
     					  {
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
-    						  writer.println("***Line " + lineNumber + "***");
-    						  writer.println("StartPosition: " + node.getStartPosition());
-    						  writer.println("Length:" + node.getLength());
-    						  writer.println("Current expression: " + node);
+    						  sb.append("***Line " + lineNumber + "***\n");
+    						  sb.append("StartPosition: " + node.getStartPosition() + "\n");
+    						  sb.append("Length:" + node.getLength() + "\n");
+    						  sb.append("Current expression: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-    						  writer.println("New expression: " + node);
-    						  writer.println();
+    						  sb.append("New expression: " + node + "\n");
+    						  sb.append("\n");
     						  return true; 
     					  }
     					  
@@ -282,7 +279,10 @@ package com.example.helloworld;
     			  
         	  }//end for loop
     		  
-    		  //Close the file
+    		  
+    		  //Create a file and print the plan
+    		  PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
+    		  writer.print(sb.toString());
     		  writer.close();
     		  
     	  } 
@@ -292,9 +292,8 @@ package com.example.helloworld;
 			e.printStackTrace();
     	  }
     	  
-    	  
-    	  
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
+    	  return sb.toString();
       }
    }//end class
