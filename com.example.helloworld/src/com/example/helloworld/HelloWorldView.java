@@ -110,7 +110,6 @@ package com.example.helloworld;
     	  if(comboProjectsList.getSelectionIndex() >= 0)
     	  {
     		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
-    		  textStatusArea.append("Begin testing project: " + projectName + "\n");
     		  try 
     		  {
     			  String directoryPath = createFolderForResults(projectName);
