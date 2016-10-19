@@ -207,7 +207,6 @@ package com.example.helloworld;
     			  {
     				  c.delete();
     			  }
-    			  //f.delete();
     		  }
     		  else//Else the folder does not exist, so create it.
     		  {
