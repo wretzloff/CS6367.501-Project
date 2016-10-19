@@ -74,11 +74,18 @@ package com.example.helloworld;
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			  
     			  String mutationPlan = mutationPlans.get(0);
-    			  String[] splits = mutationPlan.split("\n");
-    			  for(String split : splits)
-    			  {
-    				  System.out.println(split);
-    			  }  
+    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 0));
+				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 1));
+				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
+				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 3);
+				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
+				  
+				  System.out.println(mutationPlan);
+				  System.out.println("aa: "+ lineNumber);
+				  System.out.println("aa: "+ startPosition);
+				  System.out.println("aa: "+ length);
+				  System.out.println("aa: "+ currentSource);
+				  System.out.println("aa: "+ newSource);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -91,6 +98,15 @@ package com.example.helloworld;
     		  textStatusArea.append("Please make a valid selection.\n");
     	  }  
       }//end startButtonPressed()
+      
+      private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
+      {
+    	  String[] splits = mutationPlan.split("\n");
+    	  String currentSplit = splits[index];
+    	  int indexOfLabel = currentSplit.indexOf(": ") + 2;
+    	  String info = currentSplit.substring(indexOfLabel);
+    	  return info;
+      }
       
       //Given a project name, this method will create a copy of that project.
       public IProject copyProject(String projectName) throws CoreException 
@@ -272,7 +288,7 @@ package com.example.helloworld;
     					  {
     						  StringBuilder sb = new StringBuilder();
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
-    						  sb.append("***Line " + lineNumber + "***\n");
+    						  sb.append("Line: " + lineNumber + "\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
     						  sb.append("Length: " + node.getLength() + "\n");
     						  sb.append("Current source: " + node + "\n");
