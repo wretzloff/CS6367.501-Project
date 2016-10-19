@@ -272,8 +272,7 @@ package com.example.helloworld;
     						  sb.append("New source: " + node + "\n");
     						  sb.append("\n");
     						  return true; 
-    					  }
-    					  
+    					  }//end visit()
     				  });
     	    	  }//end for loop
     			  
