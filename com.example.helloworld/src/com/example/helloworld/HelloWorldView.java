@@ -202,6 +202,17 @@ import java.util.*;
     	  File f = new File(directoryPath);
     	  try
     	  {
+    		  //Delete the folder if it exists
+    		  if(f.exists()) 
+    		  { 
+    			  for (File c : f.listFiles())
+    			  {
+    				  c.delete();
+    			  }
+    			  f.delete();
+    		  }
+    		  
+    		  //Create the folder
     	      if(f.mkdir()) 
     	      { 
     	    	  System.out.println("Created directory: " + directoryPath);
