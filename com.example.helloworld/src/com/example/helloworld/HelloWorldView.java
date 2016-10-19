@@ -4,7 +4,7 @@ package com.example.helloworld;
 	import org.eclipse.swt.SWT;
 	import org.eclipse.ui.part.ViewPart;
 
-	import java.io.File;
+	import java.io.*;
 	import java.util.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
@@ -114,7 +114,7 @@ package com.example.helloworld;
     		  try 
     		  {
     			  String directoryPath = createFolderForResults(projectName);
-    			  createMutationPlan(projectName);
+    			  createMutationPlan(projectName, directoryPath);
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -201,25 +201,26 @@ package com.example.helloworld;
     	  File f = new File(directoryPath);
     	  try
     	  {
-    		  //Delete the folder if it exists
+    		  //If the folder already exists, just wipe out the contents
     		  if(f.exists()) 
     		  { 
     			  for (File c : f.listFiles())
     			  {
     				  c.delete();
     			  }
-    			  f.delete();
+    			  //f.delete();
     		  }
-    		  
-    		  //Create the folder
-    	      if(f.mkdir()) 
-    	      { 
-    	    	  System.out.println("Created directory: " + directoryPath);
-    	      } 
-    	      else 
-    	      {
-    	    	  System.out.println("Failed to create directory: " + directoryPath);
-    	      }
+    		  else//Else the folder does not exist, so create it.
+    		  {
+    			  if(f.mkdir()) 
+        	      { 
+        	    	  System.out.println("Created directory: " + directoryPath);
+        	      } 
+        	      else 
+        	      {
+        	    	  System.out.println("Failed to create directory: " + directoryPath);
+        	      }
+    		  }
     	  } 
     	  catch(Exception e)
     	  {
@@ -231,48 +232,70 @@ package com.example.helloworld;
     	  return directoryPath;
       }
       
-      private void createMutationPlan(String projectName) throws CoreException
+      private void createMutationPlan(String projectName, String directoryPath) throws CoreException
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
-    	  textStatusArea.append("Building mutation plan for project: " + projectName + "\n");
-    	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		  IJavaProject javaProject = JavaCore.create(projectCopy);
-		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-		  //Get the compilation units. Each ICompilationUnit represents a class.
-		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-		  
-		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
+    	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
+    	  
+    	  textStatusArea.append("Building mutation plan: " + mutationPlanPath + "\n");
+    	  
+    	  try 
     	  {
-			  
-			  //Parse a CompilationUnit from the ICompilationUnit
-			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
-			  AST ast = astRoot.getAST();
-			  ASTRewrite rewriter = ASTRewrite.create(ast);
-			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
-			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
-	    	  {
-				  Block methodBody = methodDeclaration.getBody();
-				  methodBody.accept(new ASTVisitor() 
-				  {  
-					  public boolean visit(PostfixExpression node) 
-					  {
-						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
-						  System.out.println("Line " + lineNumber);
-						  System.out.println("StartPosition: " + node.getStartPosition());
-						  System.out.println("Length:" + node.getLength());
-						  System.out.println("Current expression: " + node);
-						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  System.out.println("New expression: " + node);
-						  System.out.println();
-						  return true; 
-					  }
-					  
-				  });
-	    	  }//end for loop
-			  
+    		  PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
+    		  
+    		  
+    		  
+    		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    		  IJavaProject javaProject = JavaCore.create(projectCopy);
+    		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+    		  //Get the compilation units. Each ICompilationUnit represents a class.
+    		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+    		  
+    		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
+        	  {
+    			  
+    			  //Parse a CompilationUnit from the ICompilationUnit
+    			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+    			  AST ast = astRoot.getAST();
+    			  ASTRewrite rewriter = ASTRewrite.create(ast);
+    			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+    			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
+    			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
+    	    	  {
+    				  Block methodBody = methodDeclaration.getBody();
+    				  methodBody.accept(new ASTVisitor() 
+    				  {  
+    					  public boolean visit(PostfixExpression node) 
+    					  {
+    						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
+    						  writer.println("***Line " + lineNumber + "***");
+    						  writer.println("StartPosition: " + node.getStartPosition());
+    						  writer.println("Length:" + node.getLength());
+    						  writer.println("Current expression: " + node);
+    						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+    						  writer.println("New expression: " + node);
+    						  writer.println();
+    						  return true; 
+    					  }
+    					  
+    				  });
+    	    	  }//end for loop
+    			  
+        	  }//end for loop
+    		  
+    		  //Close the file
+    		  writer.close();
+    		  
+    	  } 
+    	  catch (IOException e) 
+    	  {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
     	  }
+    	  
+    	  
+    	  
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
       }
