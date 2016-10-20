@@ -294,6 +294,7 @@ package com.example.helloworld;
     						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
     						  sb.append("New source: " + node + "\n");
+    						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
     						  sb.append("\n");
     						  mutations.add(sb.toString());
     						  return true; 
