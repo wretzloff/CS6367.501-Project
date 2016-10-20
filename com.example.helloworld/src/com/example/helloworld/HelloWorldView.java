@@ -74,12 +74,12 @@ package com.example.helloworld;
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			   
     			  String mutationPlan = mutationPlans.get(0);
-    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 0);
-    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 1));
-				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
-				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
-				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
-				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
+    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 1);
+    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
+				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
+				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
+				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
+				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
 				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
 				  
     		  } 
@@ -297,9 +297,9 @@ package com.example.helloworld;
     					  public boolean visit(PostfixExpression node) 
     					  {
     						  StringBuilder sb = new StringBuilder();
-    						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
+    						  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
     						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
-    						  sb.append("Line: " + lineNumber + "\n");
+    						  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
     						  sb.append("Length: " + node.getLength() + "\n");
     						  sb.append("Current source: " + node + "\n");
