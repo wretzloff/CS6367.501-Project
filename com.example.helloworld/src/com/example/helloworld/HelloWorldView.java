@@ -74,12 +74,12 @@ package com.example.helloworld;
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			   
     			  String mutationPlan = mutationPlans.get(0);
-    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 0));
-				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 1));
-				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
-				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 3);
-				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
-				  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
+    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 0);
+    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 1));
+				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
+				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
+				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
+				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
 				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
 				  
     		  } 
@@ -298,13 +298,13 @@ package com.example.helloworld;
     					  {
     						  StringBuilder sb = new StringBuilder();
     						  int lineNumber = astRoot.getLineNumber(node.getStartPosition());
+    						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
     						  sb.append("Line: " + lineNumber + "\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
     						  sb.append("Length: " + node.getLength() + "\n");
     						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
     						  sb.append("New source: " + node + "\n");
-    						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
     						  sb.append("\n");
     						  mutations.add(sb.toString());
     						  return true; 
