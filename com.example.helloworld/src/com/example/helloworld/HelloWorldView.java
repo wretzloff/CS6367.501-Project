@@ -79,7 +79,8 @@ package com.example.helloworld;
 				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
 				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 3);
 				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 4);
-				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource);
+				  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
+				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
 				  
     		  } 
     		  catch (CoreException e) 
@@ -94,9 +95,18 @@ package com.example.helloworld;
     	  }  
       }//end startButtonPressed()
       
-      private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource)
+      private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource, String handleId)
       {
-    	  
+    	  ICompilationUnit iCompilationUnit = (ICompilationUnit)JavaCore.create(handleId);
+		  try 
+		  {
+			System.out.println(iCompilationUnit.getSource());
+		  } 
+		  catch (JavaModelException e) 
+		  {
+			  // TODO Auto-generated catch block
+			  e.printStackTrace();
+		  }
       }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
