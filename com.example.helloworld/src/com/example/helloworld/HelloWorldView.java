@@ -74,12 +74,12 @@ package com.example.helloworld;
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			   
     			  String mutationPlan = mutationPlans.get(0);
-    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 1);
-    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 2));
-				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
-				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
-				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 5);
-				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
+    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
+    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
+				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
+				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 5));
+				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
+				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 7);
 				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
 				  
     		  } 
@@ -297,7 +297,10 @@ package com.example.helloworld;
     					  public boolean visit(PostfixExpression node) 
     					  {
     						  StringBuilder sb = new StringBuilder();
+    						  IMethodBinding a = methodDeclaration.resolveBinding();
+    						  ITypeBinding b = a.getDeclaringClass();
     						  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
+    						  sb.append("Class name: " + b.getName() + "\n");
     						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
     						  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
     						  sb.append("Start Position: " + node.getStartPosition() + "\n");
@@ -305,9 +308,6 @@ package com.example.helloworld;
     						  sb.append("Current source: " + node + "\n");
     						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
     						  sb.append("New source: " + node + "\n");
-    						  IMethodBinding a = methodDeclaration.resolveBinding();
-    						  ITypeBinding b = a.getDeclaringClass();
-    						  sb.append("Class name: " + b.getName() + "\n");
     						  sb.append("\n");
     						  mutations.add(sb.toString());
     						  return true; 
