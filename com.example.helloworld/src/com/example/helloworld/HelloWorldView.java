@@ -97,16 +97,32 @@ package com.example.helloworld;
       
       private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource, String handleId)
       {
-    	  ICompilationUnit iCompilationUnit = (ICompilationUnit)JavaCore.create(handleId);
-		  try 
-		  {
-			System.out.println(iCompilationUnit.getSource());
-		  } 
-		  catch (JavaModelException e) 
-		  {
-			  // TODO Auto-generated catch block
-			  e.printStackTrace();
-		  }
+    	  try 
+    	  {
+    		  ICompilationUnit iCompilationUnit = (ICompilationUnit)JavaCore.create(handleId);
+    		  iCompilationUnit.becomeWorkingCopy(new NullProgressMonitor());
+		
+    		  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+    		  AST ast = astRoot.getAST();
+    		  ASTRewrite rewriter = ASTRewrite.create(ast);
+    		  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+		  
+    		  NodeFinder myNodeFinder = new NodeFinder(typeDecl, startPosition, length);
+    		  ASTNode oldNode = myNodeFinder.getCoveredNode();
+		  
+    		  TextElement siso = ast.newTextElement();
+    		  siso.setText(newSource);
+    		  rewriter.replace(oldNode, siso, null);
+		  
+    		  TextEdit edits = rewriter.rewriteAST();
+    		  iCompilationUnit.applyTextEdit(rewriter.rewriteAST(), new NullProgressMonitor());
+    		  iCompilationUnit.commitWorkingCopy(false, new NullProgressMonitor());
+    	  } 
+    	  catch (JavaModelException e) 
+    	  {
+    		  // TODO Auto-generated catch block
+    		  e.printStackTrace();
+    	  }
       }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
