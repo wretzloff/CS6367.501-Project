@@ -77,12 +77,10 @@ package com.example.helloworld;
     			  {
     				  String mutationPlan = mutationPlans.get(i);
         			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
-        			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
     				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
     				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 5));
-    				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
     				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 7);
-    				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
+    				  replaceSourceCode(startPosition, length, newSource, handleId);
     			  }  
     		  } 
     		  catch (CoreException e) 
@@ -97,10 +95,10 @@ package com.example.helloworld;
     	  }  
       }//end startButtonPressed()
       
-      private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource, String handleId)
+      private void replaceSourceCode(int startPosition, int length, String newSource, String handleId)
       {
     	  System.out.println("--------------------------------------------------------------------");
-    	  System.out.println("Begin replaceSourceCode(): " + lineNumber + " " + handleId);
+    	  System.out.println("Begin replaceSourceCode(): " + handleId + " " + startPosition);
     	  
     	  try 
     	  {
@@ -136,7 +134,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  System.out.println("End replaceSourceCode(): " + lineNumber + " " + handleId);
+    	  System.out.println("End replaceSourceCode(): " + handleId + " " + startPosition);
     	  System.out.println("--------------------------------------------------------------------");
       }
       
