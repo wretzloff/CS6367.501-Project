@@ -75,6 +75,9 @@ package com.example.helloworld;
     			  
     			  for (int i = 0; i < mutationPlans.size(); i++) 
     			  {
+    				  //Create a copy of the target project so that it can be mutated
+    				  //String projectCopyName = copyProject(projectName, "_mutant" + i);
+    				  
     				  String mutationPlan = mutationPlans.get(i);
         			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
     				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
@@ -148,26 +151,38 @@ package com.example.helloworld;
       }
       
       //Given a project name, this method will create a copy of that project.
-      private String copyProject(String projectName, String nameAddition) throws CoreException 
+      private String copyProject(String projectName, String nameAddition) 
       {
-    	    IProgressMonitor m = new NullProgressMonitor();
-    	    //IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-    	    IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-    	    IProjectDescription projectDescription = project.getDescription();
-    	    String cloneName = projectName + nameAddition;
-    	    // create clone project in workspace
-    	    IProjectDescription cloneDescription = ResourcesPlugin.getWorkspace().newProjectDescription(cloneName);
-    	    // copy project files
-    	    project.copy(cloneDescription, true, m);
-    	    IProject clone = ResourcesPlugin.getWorkspace().getRoot().getProject(cloneName);
-    	    // copy the project properties
-    	    cloneDescription.setNatureIds(projectDescription.getNatureIds());
-    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
-    	    cloneDescription.setDynamicReferences(projectDescription.getDynamicReferences());
-    	    cloneDescription.setBuildSpec(projectDescription.getBuildSpec());
-    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
-    	    clone.setDescription(cloneDescription, null);
-    	    return cloneName;
+    	  String cloneName = "";
+    	  try 
+    	  {
+				IProgressMonitor m = new NullProgressMonitor();
+	    	    //IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+	    	    IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+	    	    IProjectDescription projectDescription;
+				projectDescription = project.getDescription();
+				cloneName = projectName + nameAddition;
+	    	    // create clone project in workspace
+	    	    IProjectDescription cloneDescription = ResourcesPlugin.getWorkspace().newProjectDescription(cloneName);
+	    	    // copy project files
+	    	    project.copy(cloneDescription, true, m);
+	    	    IProject clone = ResourcesPlugin.getWorkspace().getRoot().getProject(cloneName);
+	    	    // copy the project properties
+	    	    cloneDescription.setNatureIds(projectDescription.getNatureIds());
+	    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
+	    	    cloneDescription.setDynamicReferences(projectDescription.getDynamicReferences());
+	    	    cloneDescription.setBuildSpec(projectDescription.getBuildSpec());
+	    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
+	    	    clone.setDescription(cloneDescription, null);
+	    	    
+    	  } 
+    	  catch (CoreException e) 
+    	  {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+    	  }
+    	  return cloneName;
+    	    
       }//end copyProject()
       
       //Return an array of the names of the projects available in the workspace.
