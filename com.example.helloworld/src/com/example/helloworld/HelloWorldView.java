@@ -70,20 +70,28 @@ package com.example.helloworld;
     		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
     		  try 
     		  {
+    			  //Create a location to store the results of the mutation testing on this project.
     			  String directoryPath = createFolderForResults(projectName);
+    			  //Generate a mutation plan for this project.
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			  
+    			  //For each mutation in the mutation plan
     			  for (int i = 0; i < mutationPlans.size(); i++) 
     			  {
     				  //Create a copy of the target project so that it can be mutated
-    				  //String projectCopyName = copyProject(projectName, "_mutant" + i);
+    				  String projectCopyName = copyProject(projectName, "_mutant" + i);
     				  
-    				  String mutationPlan = mutationPlans.get(i);
-        			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
-    				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
-    				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 5));
-    				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 7);
+    				  //Parse the information needed from this mutation
+        			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
+    				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 4));
+    				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
+    				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
+    				  
+    				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
+    				  
+    				  //Delete the project copy
+    				  deleteProject(projectCopyName);
     			  }  
     		  } 
     		  catch (CoreException e) 
@@ -185,6 +193,20 @@ package com.example.helloworld;
     	    
       }//end copyProject()
       
+      //Given a project name, this method will create a copy of that project.
+      private void deleteProject(String projectName) 
+      {
+    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    	  try 
+    	  {
+    		  project.delete(true, null);
+    	  } 
+    	  catch (CoreException e) 
+    	  {
+    		  // TODO Auto-generated catch block
+    		  e.printStackTrace();
+    	  }
+      }
       //Return an array of the names of the projects available in the workspace.
       private String[] getProjectNames()
       {
