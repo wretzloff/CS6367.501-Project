@@ -87,6 +87,9 @@ package com.example.helloworld;
     				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
     				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
     				  
+    				  //Modify the handle ID to point to the copy of the project instead of the original project
+    				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
+    				  
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
