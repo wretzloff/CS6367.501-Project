@@ -134,7 +134,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  System.out.println("End replaceSourceCode(): " + handleId + " " + startPosition);
+    	  System.out.println("End replaceSourceCode(): "  + handleId + " " + startPosition);
     	  System.out.println("--------------------------------------------------------------------");
       }
       
@@ -148,13 +148,13 @@ package com.example.helloworld;
       }
       
       //Given a project name, this method will create a copy of that project.
-      private IProject copyProject(String projectName) throws CoreException 
+      private String copyProject(String projectName, String nameAddition) throws CoreException 
       {
     	    IProgressMonitor m = new NullProgressMonitor();
     	    //IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
     	    IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	    IProjectDescription projectDescription = project.getDescription();
-    	    String cloneName = projectName + "_copy";
+    	    String cloneName = projectName + nameAddition;
     	    // create clone project in workspace
     	    IProjectDescription cloneDescription = ResourcesPlugin.getWorkspace().newProjectDescription(cloneName);
     	    // copy project files
@@ -167,7 +167,7 @@ package com.example.helloworld;
     	    cloneDescription.setBuildSpec(projectDescription.getBuildSpec());
     	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
     	    clone.setDescription(cloneDescription, null);
-    	    return clone;
+    	    return cloneName;
       }//end copyProject()
       
       //Return an array of the names of the projects available in the workspace.
