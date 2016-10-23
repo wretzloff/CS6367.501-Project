@@ -97,24 +97,34 @@ package com.example.helloworld;
       
       private void replaceSourceCode(int lineNumber, int startPosition, int length, String currentSource, String newSource, String handleId)
       {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin replaceSourceCode(): " + lineNumber + " " + handleId);
+    	  
     	  try 
     	  {
+    		  //Get ahold of the ICompilationUnit represented by the handle ID
     		  ICompilationUnit iCompilationUnit = (ICompilationUnit)JavaCore.create(handleId);
+    		  
     		  iCompilationUnit.becomeWorkingCopy(new NullProgressMonitor());
-		
     		  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
     		  AST ast = astRoot.getAST();
     		  ASTRewrite rewriter = ASTRewrite.create(ast);
     		  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-		  
+    		  
+    		  //Find the target node
     		  NodeFinder myNodeFinder = new NodeFinder(typeDecl, startPosition, length);
     		  ASTNode oldNode = myNodeFinder.getCoveredNode();
-		  
+    		  
+    		  //Create a new node using the provided source code
     		  TextElement siso = ast.newTextElement();
     		  siso.setText(newSource);
+    		  
+    		  //Replace the node
     		  rewriter.replace(oldNode, siso, null);
-		  
     		  TextEdit edits = rewriter.rewriteAST();
+    		  //Document document = new Document(iCompilationUnit.getSource());
+			  //edits.apply(document);
+			  //iCompilationUnit.getBuffer().setContents(document.get());
     		  iCompilationUnit.applyTextEdit(rewriter.rewriteAST(), new NullProgressMonitor());
     		  iCompilationUnit.commitWorkingCopy(false, new NullProgressMonitor());
     	  } 
@@ -123,6 +133,9 @@ package com.example.helloworld;
     		  // TODO Auto-generated catch block
     		  e.printStackTrace();
     	  }
+    	  
+    	  System.out.println("End replaceSourceCode(): " + lineNumber + " " + handleId);
+    	  System.out.println("--------------------------------------------------------------------");
       }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
@@ -184,62 +197,6 @@ package com.example.helloworld;
           parser.setResolveBindings(true);
           return (CompilationUnit) parser.createAST(null); // parse
       }
-      
-      private void changeIncrementsToDecrements(String projectName) throws MalformedTreeException, BadLocationException, CoreException 
-      {
-    	  System.out.println("--------------------------------------------------------------------");
-    	  System.out.println("Begin changeIncrementsToDecrements(): " + projectName);
-		  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		  IJavaProject javaProject = JavaCore.create(projectCopy);
-		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
-		  
-		  //Get the compilation units. Each ICompilationUnit represents a class.
-		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-		  
-		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
-    	  {
-			  iCompilationUnit.becomeWorkingCopy(new NullProgressMonitor());
-			  
-			  //Parse a CompilationUnit from the ICompilationUnit
-			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
-			  AST ast = astRoot.getAST();
-			  ASTRewrite rewriter = ASTRewrite.create(ast);
-			  //Each TypeDeclaration also seems to represent a class
-			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-			  //Type superclassType = typeDecl.getSuperclassType();
-			  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
-			  //Get all methods from the class
-			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
-			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
-	    	  {
-				  Block methodBody = methodDeclaration.getBody();
-				  methodBody.accept(new ASTVisitor() 
-				  {  
-					  public boolean visit(PostfixExpression node) 
-					  {						  
-						  //Build a new node from scratch to replace the current one
-						  PostfixExpression newNode = ast.newPostfixExpression();
-						  newNode.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  newNode.setOperand((Expression)rewriter.createCopyTarget(node.getOperand()));
-						  
-				    	  rewriter.replace(node, newNode, null);
-						  return true; 
-					  }
-					  
-				  });
-	    	  }//end for loop
-			  
-			  TextEdit edits = rewriter.rewriteAST();
-			  //Document document = new Document(iCompilationUnit.getSource());
-			  //edits.apply(document);
-			  //iCompilationUnit.getBuffer().setContents(document.get());
-			  iCompilationUnit.applyTextEdit(rewriter.rewriteAST(), new NullProgressMonitor());
-			  iCompilationUnit.commitWorkingCopy(false, new NullProgressMonitor());
-    	  }
-		  System.out.println("End changeIncrementsToDecrements(): " + projectName);
-    	  System.out.println("--------------------------------------------------------------------");
-      }//end changeIncrementsToDecrements()
-      
       
       private String createFolderForResults(String projectName)
       {
@@ -303,7 +260,11 @@ package com.example.helloworld;
     			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
     			  AST ast = astRoot.getAST();
     			  ASTRewrite rewriter = ASTRewrite.create(ast);
+    			  //Each TypeDeclaration also seems to represent a class
     			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+    			  //Type superclassType = typeDecl.getSuperclassType();
+    			  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
+    			  //Get all methods from the class
     			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
     			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
     	    	  {
