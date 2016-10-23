@@ -72,16 +72,18 @@ package com.example.helloworld;
     		  {
     			  String directoryPath = createFolderForResults(projectName);
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
-    			   
-    			  String mutationPlan = mutationPlans.get(0);
-    			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
-    			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
-				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
-				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 5));
-				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
-				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 7);
-				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
-				  
+    			  
+    			  for (int i = 0; i < mutationPlans.size(); i++) 
+    			  {
+    				  String mutationPlan = mutationPlans.get(i);
+        			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlan, 2);
+        			  int lineNumber = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 3));
+    				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 4));
+    				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlan, 5));
+    				  String currentSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 6);
+    				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlan, 7);
+    				  replaceSourceCode(lineNumber, startPosition, length, currentSource, newSource, handleId);
+    			  }  
     		  } 
     		  catch (CoreException e) 
     		  {
