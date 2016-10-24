@@ -13,6 +13,7 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.dom.rewrite.*;
 	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
+	import org.eclipse.debug.core.*;
 
    public class HelloWorldView extends ViewPart 
    {
@@ -92,6 +93,10 @@ package com.example.helloworld;
     				  
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
+    				  
+    				  //Execute JUnit tests on project copy
+    				  ILaunchConfiguration configuration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations()[0];
+    				  configuration.launch(ILaunchManager.RUN_MODE, null);
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
