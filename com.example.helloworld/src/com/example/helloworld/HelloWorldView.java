@@ -95,13 +95,15 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  /*DebugPlugin dPlugin = DebugPlugin.getDefault();
+    				  DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();
+    				  System.out.println(configurations.length);
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
+        				  System.out.println(configuration.toString());
     					  configuration.launch(ILaunchManager.RUN_MODE, null);  
-    				  }*/
+    				  }
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
