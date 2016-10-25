@@ -102,6 +102,7 @@ package com.example.helloworld;
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
         				  System.out.println(configuration.toString());
+        				  System.out.println(configuration.getType().getName());
     					  configuration.launch(ILaunchManager.RUN_MODE, null);  
     				  }
     				  
