@@ -97,7 +97,7 @@ package com.example.helloworld;
     				  //Execute JUnit tests on project copy
     				  DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
-    				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();
+    				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
     				  System.out.println(configurations.length);
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
