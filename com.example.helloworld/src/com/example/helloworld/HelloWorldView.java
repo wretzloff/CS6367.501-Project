@@ -177,20 +177,23 @@ package com.example.helloworld;
       //Given a project name, this method will create a copy of that project.
       private String copyProject(String projectName, String nameAddition) 
       {
-    	  String cloneName = "";
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin copyProject(): " + projectName);
+    	  String cloneName = projectName + nameAddition;
     	  try 
     	  {
 				IProgressMonitor m = new NullProgressMonitor();
-	    	    //IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 	    	    IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 	    	    IProjectDescription projectDescription;
 				projectDescription = project.getDescription();
-				cloneName = projectName + nameAddition;
-	    	    // create clone project in workspace
+				
+				// create clone project in workspace
 	    	    IProjectDescription cloneDescription = ResourcesPlugin.getWorkspace().newProjectDescription(cloneName);
+	    	    
 	    	    // copy project files
 	    	    project.copy(cloneDescription, true, m);
 	    	    IProject clone = ResourcesPlugin.getWorkspace().getRoot().getProject(cloneName);
+	    	    
 	    	    // copy the project properties
 	    	    cloneDescription.setNatureIds(projectDescription.getNatureIds());
 	    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
@@ -205,6 +208,9 @@ package com.example.helloworld;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
     	  }
+    	  
+    	  System.out.println("End copyProject(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
     	  return cloneName;
     	    
       }//end copyProject()
