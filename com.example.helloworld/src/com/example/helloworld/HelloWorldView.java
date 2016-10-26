@@ -98,13 +98,22 @@ package com.example.helloworld;
     				  DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
-    				  System.out.println("Number of launch configurations: " + configurations.length);
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
-        				  System.out.println(configuration.toString());
-        				  System.out.println(configuration.getType().getName());
-        				  System.out.println(configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-    					  configuration.launch(ILaunchManager.RUN_MODE, null);  
+    					  System.out.println("Run configuration name: " + configuration.getName());
+    					  System.out.println("Project: " + configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+    					  System.out.println("Test class: ");
+        				  System.out.println("Run configuration type: " + configuration.getType().getName());
+        				  
+        				  //Check if this is a JUnit run configuration, and if it belongs to the original project.
+        				  if(configuration.getType().getName().equals("JUnit") && configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "").equals(projectName))
+    					  {
+    						  System.out.println("Found a JUnit run configuration for project: " + projectName + ".");
+    						  System.out.println("Need to make a copy of it for project: " + projectCopyName);
+    						  //ILaunchConfiguration newJUnitRunConfiguration = configuration.copy(projectCopyName);//Same name as the original, except substitute the project copy name in place of the original project name.
+
+    					  }
+        				  //configuration.launch(ILaunchManager.RUN_MODE, null);  
     				  }
     				  
     				  //Delete the project copy
