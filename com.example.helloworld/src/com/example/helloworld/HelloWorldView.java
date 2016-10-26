@@ -180,6 +180,7 @@ package com.example.helloworld;
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin copyProject(): " + projectName);
     	  String cloneName = projectName + nameAddition;
+
     	  try 
     	  {
 				IProgressMonitor m = new NullProgressMonitor();
@@ -218,17 +219,26 @@ package com.example.helloworld;
       //Given a project name, this method will create a copy of that project.
       private void deleteProject(String projectName) 
       {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin deleteProject(): " + projectName);
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-    	  try 
+    	  if(project.exists())
     	  {
-    		  project.delete(true, null);
-    	  } 
-    	  catch (CoreException e) 
-    	  {
-    		  // TODO Auto-generated catch block
-    		  e.printStackTrace();
+    		  System.out.println("Project " + projectName + " exists. It is being deleted.");
+    		  try 
+    		  {
+    			  project.delete(true, null);
+    		  } 
+    		  catch (CoreException e) 
+    		  {
+    			  // TODO Auto-generated catch block
+    			  e.printStackTrace();
+    		  }
     	  }
+    	  System.out.println("End deleteProject(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
       }
+      
       //Return an array of the names of the projects available in the workspace.
       private String[] getProjectNames()
       {
