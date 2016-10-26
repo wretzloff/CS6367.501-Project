@@ -100,6 +100,8 @@ package com.example.helloworld;
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
+    					  //Would it be viable to create an AllTests configuration in the original project, so that it's copied to the mutants.
+    					  //Then, I'd be able to simply run AllTests on the mutant.
     					  System.out.println("Run configuration name: " + configuration.getName());
     					  System.out.println("Project: " + configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
     					  System.out.println("Test class: ");
