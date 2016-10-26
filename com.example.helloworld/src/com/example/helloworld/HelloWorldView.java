@@ -98,11 +98,12 @@ package com.example.helloworld;
     				  DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
-    				  System.out.println(configurations.length);
+    				  System.out.println("Number of launch configurations: " + configurations.length);
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
         				  System.out.println(configuration.toString());
         				  System.out.println(configuration.getType().getName());
+        				  System.out.println(configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
     					  configuration.launch(ILaunchManager.RUN_MODE, null);  
     				  }
     				  
