@@ -75,7 +75,6 @@ package com.example.helloworld;
     			  String directoryPath = createFolderForResults(projectName);
     			  //Generate a mutation plan for this project.
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
-				  createJUnitRunConfiguration(projectName);
     			  
     			  //For each mutation in the mutation plan
     			  for (int i = 0; i < mutationPlans.size(); i++) 
@@ -96,7 +95,8 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  /*DebugPlugin dPlugin = DebugPlugin.getDefault();
+    				  createJUnitRunConfiguration(projectName);
+    				  DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
     				  for(ILaunchConfiguration configuration : configurations)
@@ -117,7 +117,7 @@ package com.example.helloworld;
 
     					  }
         				  //configuration.launch(ILaunchManager.RUN_MODE, null);  
-    				  }*/
+    				  }
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
