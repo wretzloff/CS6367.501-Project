@@ -410,7 +410,7 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TESTNAME", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND", "org.eclipse.jdt.junit.loader.junit4");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
-    	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
+    	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", projectName);
     	        workingCopy.doSave();
     	    } 
     	    catch (CoreException e) {
