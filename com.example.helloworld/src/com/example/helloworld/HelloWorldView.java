@@ -75,6 +75,7 @@ package com.example.helloworld;
     			  String directoryPath = createFolderForResults(projectName);
     			  //Generate a mutation plan for this project.
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
+				  createJUnitRunConfiguration(projectName);
     			  
     			  //For each mutation in the mutation plan
     			  for (int i = 0; i < mutationPlans.size(); i++) 
@@ -95,7 +96,7 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  DebugPlugin dPlugin = DebugPlugin.getDefault();
+    				  /*DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
     				  for(ILaunchConfiguration configuration : configurations)
@@ -104,7 +105,7 @@ package com.example.helloworld;
     					  //Then, I'd be able to simply run AllTests on the mutant.
     					  System.out.println("Run configuration name: " + configuration.getName());
     					  System.out.println("Project: " + configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-    					  System.out.println("Test class: ");
+    					  System.out.println("Test class: " );
         				  System.out.println("Run configuration type: " + configuration.getType().getName());
         				  
         				  //Check if this is a JUnit run configuration, and if it belongs to the original project.
@@ -116,7 +117,7 @@ package com.example.helloworld;
 
     					  }
         				  //configuration.launch(ILaunchManager.RUN_MODE, null);  
-    				  }
+    				  }*/
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
@@ -393,4 +394,32 @@ package com.example.helloworld;
     	  System.out.println("--------------------------------------------------------------------");
     	  return mutations;
       }
+      
+      public static void createJUnitRunConfiguration(String projectName) 
+      {
+    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    	  ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+    	  ILaunchConfigurationType launchType = manager.getLaunchConfigurationType("org.eclipse.jdt.junit.launchconfig");
+    	  try 
+    	  {
+    	        ILaunchConfigurationWorkingCopy workingCopy = launchType.newInstance(null, project.getName());
+    	        /*List<IResource> resources = new ArrayList<IResource>();
+    	        resources.add(project);
+    	        IResource[] resourcesArray = toArray(resources);
+    	        workingCopy.setMappedResources(resources.toArray(resourcesArray) );
+    	        workingCopy.setAttribute("org.eclipse.jdt.junit.CONTAINER", project.getName().replace("#", "\\#"));
+    	        workingCopy.setAttribute("org.eclipse.jdt.junit.KEEPRUNNING_ATTR", false);
+    	        workingCopy.setAttribute("org.eclipse.jdt.junit.TESTNAME", "");
+    	        workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND", "org.eclipse.jdt.junit.loader.junit4");
+    	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
+    	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
+    	        workingCopy.setAttribute("org.eclipse.jdt.launching.VM_ARGUMENTS", "-Xms128m -Xmx512m -DSYS_DRIVE=${env_var:SYS_DRIVE} " +
+    	                "-DAPPL_DRIVE=${env_var:APPL_DRIVE} -DDATA1_DRIVE=${env_var:DATA1_DRIVE} -DSYS_DIR=${env_var:SYS_DIR} " +
+    	                "-DEXT1_DRIVE=F: -DTESTDATA_ROOT=${workspace_loc:trunk#IS+LVIS/testdata}");
+    	        workingCopy.doSave();*/
+    	    } 
+    	    catch (CoreException e) {
+    	        
+    	    }
+    	}
    }//end class
