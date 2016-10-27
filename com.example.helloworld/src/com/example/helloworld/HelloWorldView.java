@@ -395,7 +395,7 @@ package com.example.helloworld;
     	  return mutations;
       }
       
-      public static void createJUnitRunConfiguration(String projectName) 
+      private static void createJUnitRunConfiguration(String projectName) 
       {
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
@@ -411,9 +411,6 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND", "org.eclipse.jdt.junit.loader.junit4");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
-    	        workingCopy.setAttribute("org.eclipse.jdt.launching.VM_ARGUMENTS", "-Xms128m -Xmx512m -DSYS_DRIVE=${env_var:SYS_DRIVE} " +
-    	                "-DAPPL_DRIVE=${env_var:APPL_DRIVE} -DDATA1_DRIVE=${env_var:DATA1_DRIVE} -DSYS_DIR=${env_var:SYS_DIR} " +
-    	                "-DEXT1_DRIVE=F: -DTESTDATA_ROOT=${workspace_loc:trunk#IS+LVIS/testdata}");
     	        workingCopy.doSave();
     	    } 
     	    catch (CoreException e) {
