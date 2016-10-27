@@ -403,10 +403,8 @@ package com.example.helloworld;
     	  try 
     	  {
     	        ILaunchConfigurationWorkingCopy workingCopy = launchType.newInstance(null, project.getName());
-    	        /*List<IResource> resources = new ArrayList<IResource>();
-    	        resources.add(project);
-    	        IResource[] resourcesArray = toArray(resources);
-    	        workingCopy.setMappedResources(resources.toArray(resourcesArray) );
+    	        IResource[] resourcesArray = {project};
+    	        workingCopy.setMappedResources(resourcesArray);
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.CONTAINER", project.getName().replace("#", "\\#"));
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.KEEPRUNNING_ATTR", false);
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TESTNAME", "");
@@ -416,7 +414,7 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.VM_ARGUMENTS", "-Xms128m -Xmx512m -DSYS_DRIVE=${env_var:SYS_DRIVE} " +
     	                "-DAPPL_DRIVE=${env_var:APPL_DRIVE} -DDATA1_DRIVE=${env_var:DATA1_DRIVE} -DSYS_DIR=${env_var:SYS_DIR} " +
     	                "-DEXT1_DRIVE=F: -DTESTDATA_ROOT=${workspace_loc:trunk#IS+LVIS/testdata}");
-    	        workingCopy.doSave();*/
+    	        workingCopy.doSave();
     	    } 
     	    catch (CoreException e) {
     	        
