@@ -116,7 +116,7 @@ package com.example.helloworld;
     						  //ILaunchConfiguration newJUnitRunConfiguration = configuration.copy(projectCopyName);//Same name as the original, except substitute the project copy name in place of the original project name.
 
     					  }
-        				  //configuration.launch(ILaunchManager.RUN_MODE, null);  
+        				  configuration.launch(ILaunchManager.RUN_MODE, null);  
     				  }
     				  
     				  //Delete the project copy
@@ -405,7 +405,7 @@ package com.example.helloworld;
     	        ILaunchConfigurationWorkingCopy workingCopy = launchType.newInstance(null, project.getName());
     	        IResource[] resourcesArray = {project};
     	        workingCopy.setMappedResources(resourcesArray);
-    	        workingCopy.setAttribute("org.eclipse.jdt.junit.CONTAINER", project.getName().replace("#", "\\#"));
+    	        workingCopy.setAttribute("org.eclipse.jdt.junit.CONTAINER", "=" + project.getName().replace("#", "\\#"));
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.KEEPRUNNING_ATTR", false);
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TESTNAME", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND", "org.eclipse.jdt.junit.loader.junit4");
