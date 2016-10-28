@@ -95,10 +95,18 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  createJUnitRunConfiguration(projectName);
-    				  DebugPlugin dPlugin = DebugPlugin.getDefault();
-    				  ILaunchManager launchManager = dPlugin.getLaunchManager();
-    				  ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
+    				  //DebugPlugin dPlugin = DebugPlugin.getDefault();
+    				  //ILaunchManager launchManager = dPlugin.getLaunchManager();
+    				  //ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
+    				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectName);//projectCopyName);
+    				  System.out.println("Run configuration name: " + launchConfiguration.getName());
+					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+					  System.out.println("Test class: " );
+    				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+    				  launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+    				  
+    				  
+    				  /*
     				  for(ILaunchConfiguration configuration : configurations)
     				  {
     					  //Would it be viable to create an AllTests configuration in the original project, so that it's copied to the mutants.
@@ -117,7 +125,7 @@ package com.example.helloworld;
 
     					  }
         				  configuration.launch(ILaunchManager.RUN_MODE, null);  
-    				  }
+    				  }*/
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
