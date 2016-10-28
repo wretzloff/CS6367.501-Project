@@ -105,28 +105,6 @@ package com.example.helloworld;
     				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
     				  //launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
     				  
-    				  
-    				  /*
-    				  for(ILaunchConfiguration configuration : configurations)
-    				  {
-    					  //Would it be viable to create an AllTests configuration in the original project, so that it's copied to the mutants.
-    					  //Then, I'd be able to simply run AllTests on the mutant.
-    					  System.out.println("Run configuration name: " + configuration.getName());
-    					  System.out.println("Project: " + configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-    					  System.out.println("Test class: " );
-        				  System.out.println("Run configuration type: " + configuration.getType().getName());
-        				  
-        				  //Check if this is a JUnit run configuration, and if it belongs to the original project.
-        				  if(configuration.getType().getName().equals("JUnit") && configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "").equals(projectName))
-    					  {
-    						  System.out.println("Found a JUnit run configuration for project: " + projectName + ".");
-    						  System.out.println("Need to make a copy of it for project: " + projectCopyName);
-    						  //ILaunchConfiguration newJUnitRunConfiguration = configuration.copy(projectCopyName);//Same name as the original, except substitute the project copy name in place of the original project name.
-
-    					  }
-        				  configuration.launch(ILaunchManager.RUN_MODE, null);  
-    				  }*/
-    				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
     			  }  
