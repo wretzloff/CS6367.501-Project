@@ -104,6 +104,7 @@ package com.example.helloworld;
 					  System.out.println("Test class: " );
     				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
     				  //launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+    				  launchConfiguration.delete();
     				  
     				  //Delete the project copy
     				  deleteProject(projectCopyName);
