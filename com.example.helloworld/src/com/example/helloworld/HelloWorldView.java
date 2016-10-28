@@ -395,14 +395,15 @@ package com.example.helloworld;
     	  return mutations;
       }
       
-      private static void createJUnitRunConfiguration(String projectName) 
+      private ILaunchConfigurationWorkingCopy createJUnitRunConfiguration(String projectName) 
       {
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
     	  ILaunchConfigurationType launchType = manager.getLaunchConfigurationType("org.eclipse.jdt.junit.launchconfig");
+    	  ILaunchConfigurationWorkingCopy workingCopy = null;
     	  try 
     	  {
-    	        ILaunchConfigurationWorkingCopy workingCopy = launchType.newInstance(null, project.getName());
+    	        workingCopy = launchType.newInstance(null, project.getName());
     	        IResource[] resourcesArray = {project};
     	        workingCopy.setMappedResources(resourcesArray);
     	        workingCopy.setAttribute("org.eclipse.jdt.junit.CONTAINER", "=" + project.getName().replace("#", "\\#"));
@@ -412,9 +413,11 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", projectName);
     	        workingCopy.doSave();
+    	        
     	    } 
     	    catch (CoreException e) {
     	        
     	    }
+    	  return workingCopy;
     	}
    }//end class
