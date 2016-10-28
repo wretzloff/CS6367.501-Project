@@ -98,7 +98,7 @@ package com.example.helloworld;
     				  //DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  //ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  //ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
-    				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectName);//projectCopyName);
+    				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
     				  System.out.println("Run configuration name: " + launchConfiguration.getName());
 					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
 					  System.out.println("Test class: " );
