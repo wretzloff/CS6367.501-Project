@@ -103,7 +103,7 @@ package com.example.helloworld;
 					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
 					  System.out.println("Test class: " );
     				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
-    				  launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+    				  //launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
     				  
     				  
     				  /*
@@ -405,6 +405,8 @@ package com.example.helloworld;
       
       private ILaunchConfigurationWorkingCopy createJUnitRunConfiguration(String projectName) 
       {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin createJUnitRunConfiguration(): " + projectName);
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
     	  ILaunchConfigurationType launchType = manager.getLaunchConfigurationType("org.eclipse.jdt.junit.launchconfig");
@@ -426,6 +428,9 @@ package com.example.helloworld;
     	    catch (CoreException e) {
     	        
     	    }
+    	  
+    	  System.out.println("End createJUnitRunConfiguration(): " + projectName);
+    	  System.out.println("--------------------------------------------------------------------");
     	  return workingCopy;
     	}
    }//end class
