@@ -164,8 +164,7 @@ package com.example.helloworld;
 				  {
 					  if(process.isTerminated() == false)
 					  {
-						  processNotTerminated = true;
-						  
+						  processNotTerminated = true;  
 					  }
 				  }
 				  
