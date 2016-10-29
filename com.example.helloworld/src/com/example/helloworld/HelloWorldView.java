@@ -11,6 +11,8 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.*;
 	import org.eclipse.jdt.core.dom.*;
 	import org.eclipse.jdt.core.dom.rewrite.*;
+	import org.eclipse.jdt.junit.*;
+	import org.eclipse.jdt.junit.model.ITestRunSession;
 	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	import org.eclipse.debug.core.*;
@@ -98,11 +100,13 @@ package com.example.helloworld;
     				  //DebugPlugin dPlugin = DebugPlugin.getDefault();
     				  //ILaunchManager launchManager = dPlugin.getLaunchManager();
     				  //ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
+    				  //Register a TestRunListener object
+    				  JUnitCore.addTestRunListener(new MutationTestRunListener());
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
     				  System.out.println("Run configuration name: " + launchConfiguration.getName());
 					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
 					  System.out.println("Test class: " );
-    				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+					  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
     				  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
     				  launchConfiguration.delete();
     				  
@@ -411,5 +415,15 @@ package com.example.helloworld;
     	  System.out.println("End createJUnitRunConfiguration(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return workingCopy;
-    	}
+      }
+      
+      class MutationTestRunListener extends TestRunListener 
+      {
+    	  public void sessionFinished(ITestRunSession session) 
+    	  {
+    		  System.out.println("Hello from MutationTestRunListener");
+    	      // Do something with session - save it away to a collection, for example.
+    	  }
+
+      }// end inner class
    }//end class

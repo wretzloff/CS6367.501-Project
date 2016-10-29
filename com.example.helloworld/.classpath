@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/wretz/Desktop/Repositories/CS6367.501-Project/trunk/com.example.helloworld/lib/org.eclipse.text_3.5.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/Users/wretz/Desktop/Repositories/CS6367.501-Project/trunk/com.example.helloworld/lib/org.eclipse.debug.core-3.3.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/wretz/Desktop/Repositories/CS6367.501-Project/trunk/com.example.helloworld/lib/org.eclipse.jdt.junit-3.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
