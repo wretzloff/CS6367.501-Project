@@ -97,65 +97,10 @@ package com.example.helloworld;
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
-    				  //Execute JUnit tests on project copy
-    				  JUnitCore.addTestRunListener(new TestRunListener() {
-    					  public void sessionFinished(ITestRunSession session) 
-    			    	  {
-    			        	  System.out.println("--------------------------------------------------------------------");
-    			        	  System.out.println("Begin sessionFinished(): ");
-    			    	      // Do something with session - save it away to a collection, for example.
-    			    		  System.out.println("Launch configuration name: " + session.getTestRunName());
-    			    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
-    			    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
-    			    		  System.out.println("Session test result: " + session.getTestResult(false));
-    			    		  ITestElement[] children = session.getChildren();
-    			    		  for(ITestElement child : children)
-    			    		  {
-    			    			  System.out.println(child.toString());
-    			    		  }
-    			    		  
-    			    		  
-    			        	  System.out.println("End sessionFinished(): ");
-    			        	  System.out.println("--------------------------------------------------------------------");
-    			    	  }
-    				  });
-    				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
-    				  //System.out.println("Run configuration name: " + launchConfiguration.getName());
-					  //System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-					  //System.out.println("Test class: " );
-					  //System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
-    				  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
-    				  IProcess[] processes = launch.getProcesses();
-    				  while(true)
-    				  {
-    					  Thread.sleep(10000);
-    					  boolean processNotTerminated = false;
-    					  for(IProcess process : processes)
-        				  {
-        					  if(process.isTerminated() == false)
-        					  {
-        						  processNotTerminated = true;
-        						  
-        					  }
-        				  }
-    					  
-    					  if(processNotTerminated)
-    					  {
-    						  System.out.println("Not yet terminated");
-    					  }
-    					  else
-    					  {
-    						  break;
-    					  }
-    					  
-    					  
-    				  }
+    				  //Execute JUnit tests on project copy.
+    				  executeTests(projectCopyName);
     				  
-    				  
-    				  
-    				  
-    				  //Clean up the project copy and launch configuration
-    				  launchConfiguration.delete();
+    				  //Clean up the project copy now that we're done with it
     				  deleteProject(projectCopyName);
     			  }  
     		  } 
@@ -163,16 +108,93 @@ package com.example.helloworld;
     		  {
 				//TODO Auto-generated catch block
 				e.printStackTrace();
-    		  } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		  } 
     	  }
     	  else
     	  {
     		  textStatusArea.append("Please make a valid selection.\n");
     	  }  
       }//end startButtonPressed()
+      
+      private void executeTests(String projectCopyName)
+      {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin executeTests(): " + projectCopyName);
+    	  try
+    	  {
+    		  //Create a listener to listen for the completion of the tests, so the results can be logged.
+    		  JUnitCore.addTestRunListener(new TestRunListener() {
+				  public void sessionFinished(ITestRunSession session) 
+		    	  {
+		        	  System.out.println("--------------------------------------------------------------------");
+		        	  System.out.println("Begin sessionFinished(): ");
+		    		  System.out.println("Launch configuration name: " + session.getTestRunName());
+		    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
+		    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
+		    		  System.out.println("Session test result: " + session.getTestResult(false));
+		    		  ITestElement[] children = session.getChildren();
+		    		  for(ITestElement child : children)
+		    		  {
+		    			  System.out.println(child.toString());
+		    		  }
+		    		  
+		    		  
+		        	  System.out.println("End sessionFinished(): ");
+		        	  System.out.println("--------------------------------------------------------------------");
+		    	  }
+			  });
+    		  
+    		  //Create a new launch configuration that will launch all JUnit tests.
+			  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
+			  //System.out.println("Run configuration name: " + launchConfiguration.getName());
+			  //System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+			  //System.out.println("Test class: " );
+			  //System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+			  
+			  //Launch the tests.
+			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+			  
+			  //Wait for the launch to complete.
+			  IProcess[] processes = launch.getProcesses();
+			  while(true)
+			  {
+				  Thread.sleep(10000);
+				  boolean processNotTerminated = false;
+				  for(IProcess process : processes)
+				  {
+					  if(process.isTerminated() == false)
+					  {
+						  processNotTerminated = true;
+						  
+					  }
+				  }
+				  
+				  if(processNotTerminated)
+				  {
+					  System.out.println("Not yet terminated");
+				  }
+				  else
+				  {
+					  break;
+				  }
+			  }
+			  
+			  //Delete launch configuration now that we're done with it
+			  launchConfiguration.delete();
+    	  }
+    	  catch (CoreException e) 
+    	  {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+    	  } catch (InterruptedException e) 
+    	  {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+    	  }
+    	  
+    	  System.out.println("End executeTests(): " + projectCopyName);
+    	  System.out.println("--------------------------------------------------------------------");
+      }//end executeTests()
       
       private void replaceSourceCode(int startPosition, int length, String newSource, String handleId)
       {
