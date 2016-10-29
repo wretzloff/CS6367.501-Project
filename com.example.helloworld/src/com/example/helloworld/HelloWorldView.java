@@ -139,6 +139,10 @@ package com.example.helloworld;
 		    		  }
 		    		  
 		    		  
+		    		  //Create a file and print the plan
+		    		  //String resultsFilePath = getResultsDirectory() + "/" + session.getLaunchedProject().getElementName() + ".txt";
+		    		  //PrintWriter writer = new PrintWriter(new File(resultsFilePath));
+		    		  
 		        	  System.out.println("End sessionFinished(): ");
 		        	  System.out.println("--------------------------------------------------------------------");
 		    	  }
