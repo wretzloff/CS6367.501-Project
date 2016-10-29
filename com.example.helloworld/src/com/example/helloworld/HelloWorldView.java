@@ -170,7 +170,7 @@ package com.example.helloworld;
 				  
 				  if(processNotTerminated)
 				  {
-					  System.out.println("Not yet terminated");
+					  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " still running.");
 				  }
 				  else
 				  {
