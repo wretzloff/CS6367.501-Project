@@ -12,7 +12,8 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.dom.*;
 	import org.eclipse.jdt.core.dom.rewrite.*;
 	import org.eclipse.jdt.junit.*;
-	import org.eclipse.jdt.junit.model.ITestRunSession;
+import org.eclipse.jdt.junit.model.ITestElement;
+import org.eclipse.jdt.junit.model.ITestRunSession;
 	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	import org.eclipse.debug.core.*;
@@ -97,16 +98,12 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  //DebugPlugin dPlugin = DebugPlugin.getDefault();
-    				  //ILaunchManager launchManager = dPlugin.getLaunchManager();
-    				  //ILaunchConfiguration[] configurations = launchManager.getLaunchConfigurations();//These are the run configurations that you see under Run > RUn Configurations
-    				  //Register a TestRunListener object
     				  JUnitCore.addTestRunListener(new MutationTestRunListener());
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
-    				  System.out.println("Run configuration name: " + launchConfiguration.getName());
-					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-					  System.out.println("Test class: " );
-					  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+    				  //System.out.println("Run configuration name: " + launchConfiguration.getName());
+					  //System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+					  //System.out.println("Test class: " );
+					  //System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
     				  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
     				  launchConfiguration.delete();
     				  
@@ -421,8 +418,21 @@ package com.example.helloworld;
       {
     	  public void sessionFinished(ITestRunSession session) 
     	  {
-    		  System.out.println("Hello from MutationTestRunListener");
+        	  System.out.println("--------------------------------------------------------------------");
+        	  System.out.println("Begin sessionFinished(): ");
     	      // Do something with session - save it away to a collection, for example.
+    		  System.out.println("Launch configuration name: " + session.getTestRunName());
+    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
+    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
+    		  System.out.println("Session test result: " + session.getTestResult(false));
+    		  ITestElement[] children = session.getChildren();
+    		  for(ITestElement child : children)
+    		  {
+    			  System.out.println(child.toString());
+    		  }
+    		  
+        	  System.out.println("End sessionFinished(): ");
+        	  System.out.println("--------------------------------------------------------------------");
     	  }
 
       }// end inner class
