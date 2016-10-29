@@ -344,7 +344,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createFolderForResults(): " + projectName);
-    	  String directoryPath = System.getProperty("user.dir") + "\\MutationTesting_" + projectName;
+    	  String directoryPath = getResultsDirectory() + "\\MutationTesting_" + projectName;
     	  File f = new File(directoryPath);
     	  try
     	  {
@@ -376,6 +376,11 @@ package com.example.helloworld;
     	  System.out.println("End createFolderForResults(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return directoryPath;
+      }
+      
+      private String getResultsDirectory()
+      {
+    	  return System.getProperty("user.dir");
       }
       
       private ArrayList<String> createMutationPlan(String projectName, String directoryPath) throws CoreException
