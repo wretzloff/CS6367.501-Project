@@ -16,6 +16,7 @@ package com.example.helloworld;
 	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	import org.eclipse.debug.core.*;
+	import org.eclipse.debug.core.model.IProcess;
 
    public class HelloWorldView extends ViewPart 
    {
@@ -124,9 +125,37 @@ package com.example.helloworld;
 					  //System.out.println("Test class: " );
 					  //System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
     				  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
-    				  launchConfiguration.delete();
+    				  IProcess[] processes = launch.getProcesses();
+    				  while(true)
+    				  {
+    					  Thread.sleep(10000);
+    					  boolean processNotTerminated = false;
+    					  for(IProcess process : processes)
+        				  {
+        					  if(process.isTerminated() == false)
+        					  {
+        						  processNotTerminated = true;
+        						  
+        					  }
+        				  }
+    					  
+    					  if(processNotTerminated)
+    					  {
+    						  System.out.println("Not yet terminated");
+    					  }
+    					  else
+    					  {
+    						  break;
+    					  }
+    					  
+    					  
+    				  }
     				  
-    				  //Delete the project copy
+    				  
+    				  
+    				  
+    				  //Clean up the project copy and launch configuration
+    				  launchConfiguration.delete();
     				  deleteProject(projectCopyName);
     			  }  
     		  } 
@@ -134,7 +163,10 @@ package com.example.helloworld;
     		  {
 				//TODO Auto-generated catch block
 				e.printStackTrace();
-    		  }
+    		  } catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	  }
     	  else
     	  {
