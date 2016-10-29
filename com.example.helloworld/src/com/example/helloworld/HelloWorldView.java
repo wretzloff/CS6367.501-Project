@@ -98,7 +98,27 @@ import org.eclipse.jdt.junit.model.ITestRunSession;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy
-    				  JUnitCore.addTestRunListener(new MutationTestRunListener());
+    				  JUnitCore.addTestRunListener(new TestRunListener() {
+    					  public void sessionFinished(ITestRunSession session) 
+    			    	  {
+    			        	  System.out.println("--------------------------------------------------------------------");
+    			        	  System.out.println("Begin sessionFinished(): ");
+    			    	      // Do something with session - save it away to a collection, for example.
+    			    		  System.out.println("Launch configuration name: " + session.getTestRunName());
+    			    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
+    			    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
+    			    		  System.out.println("Session test result: " + session.getTestResult(false));
+    			    		  ITestElement[] children = session.getChildren();
+    			    		  for(ITestElement child : children)
+    			    		  {
+    			    			  System.out.println(child.toString());
+    			    		  }
+    			    		  
+    			    		  
+    			        	  System.out.println("End sessionFinished(): ");
+    			        	  System.out.println("--------------------------------------------------------------------");
+    			    	  }
+    				  });
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
     				  //System.out.println("Run configuration name: " + launchConfiguration.getName());
 					  //System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
@@ -414,26 +434,5 @@ import org.eclipse.jdt.junit.model.ITestRunSession;
     	  return workingCopy;
       }
       
-      class MutationTestRunListener extends TestRunListener 
-      {
-    	  public void sessionFinished(ITestRunSession session) 
-    	  {
-        	  System.out.println("--------------------------------------------------------------------");
-        	  System.out.println("Begin sessionFinished(): ");
-    	      // Do something with session - save it away to a collection, for example.
-    		  System.out.println("Launch configuration name: " + session.getTestRunName());
-    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
-    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
-    		  System.out.println("Session test result: " + session.getTestResult(false));
-    		  ITestElement[] children = session.getChildren();
-    		  for(ITestElement child : children)
-    		  {
-    			  System.out.println(child.toString());
-    		  }
-    		  
-        	  System.out.println("End sessionFinished(): ");
-        	  System.out.println("--------------------------------------------------------------------");
-    	  }
-
-      }// end inner class
+      
    }//end class
