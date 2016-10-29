@@ -103,7 +103,7 @@ package com.example.helloworld;
 					  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
 					  System.out.println("Test class: " );
     				  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
-    				  //launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+    				  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
     				  launchConfiguration.delete();
     				  
     				  //Delete the project copy
