@@ -128,18 +128,20 @@ package com.example.helloworld;
 		    	  {
 		        	  System.out.println("--------------------------------------------------------------------");
 		        	  System.out.println("Begin sessionFinished(): ");
-		    		  System.out.println("Launch configuration name: " + session.getTestRunName());
-		    		  System.out.println("Project name: " + session.getLaunchedProject().getElementName());
-		    		  System.out.println("Elapsed time in seconds: " + session.getElapsedTimeInSeconds());
-		    		  System.out.println("Session test result: " + session.getTestResult(false));
+		        	
+		        	  //Create a temporary ArrayList to hold each line of the test results 
+			    	  ArrayList<String> results = new ArrayList<String>();
+		    		  results.add("Elapsed time in seconds: " + session.getElapsedTimeInSeconds() + "\n");
+		    		  
+		    		  //Loop through the test suites.
 		    		  ITestElement[] children = session.getChildren();
 		    		  for(ITestElement child : children)
 		    		  {
-		    			  System.out.println(child.toString());
+		    			  results.add(child.toString() + "\n");
 		    		  }
 		    		  
 		    		  //Create a file and print the results
-		    		  //String resultsFilePath = getResultsDirectory() + "/" + session.getLaunchedProject().getElementName() + ".txt";
+		    		  //String resultsFilePath = getResultsDirectory() + "/" + session.getLaunchedProject().getElementName() + " - " + + session.getTestResult(false) + ".txt";
 		    		  //printArrayListOfStringsToFile(resultsFilePath, results);
 		    		  
 		        	  System.out.println("End sessionFinished(): ");
