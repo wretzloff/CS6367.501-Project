@@ -165,10 +165,10 @@ package com.example.helloworld;
 			  
 			  //Wait for the launch to complete.
 			  IProcess[] processes = launch.getProcesses();
+			  boolean processNotTerminated = false;
 			  while(true)
 			  {
 				  Thread.sleep(10000);
-				  boolean processNotTerminated = false;
 				  for(IProcess process : processes)
 				  {
 					  if(process.isTerminated() == false)
