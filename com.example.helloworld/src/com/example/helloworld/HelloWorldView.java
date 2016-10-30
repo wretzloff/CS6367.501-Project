@@ -138,14 +138,9 @@ package com.example.helloworld;
 		    			  System.out.println(child.toString());
 		    		  }
 		    		  
-		    		  
-		    		  //Create a file and print the plan
+		    		  //Create a file and print the results
 		    		  //String resultsFilePath = getResultsDirectory() + "/" + session.getLaunchedProject().getElementName() + ".txt";
-		    		  //PrintWriter writer = new PrintWriter(new File(resultsFilePath));
-		    		  //for(String mutation : mutations)
-		    		  //{
-		        	//	  writer.print(mutation);    			  
-		    		  //}
+		    		  //printArrayListOfStringsToFile(resultsFilePath, results);
 		    		  
 		        	  System.out.println("End sessionFinished(): ");
 		        	  System.out.println("--------------------------------------------------------------------");
@@ -467,13 +462,7 @@ package com.example.helloworld;
 		  
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
-		  /*PrintWriter writer = new PrintWriter(new File(mutationPlanPath));
-		  for(String mutation : mutations)
-		  {
-			  writer.print(mutation);    			  
-		  }
-		  writer.close();*/
-    	  
+		  
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return mutations;
