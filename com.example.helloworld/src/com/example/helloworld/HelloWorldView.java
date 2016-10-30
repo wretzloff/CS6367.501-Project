@@ -98,7 +98,7 @@ package com.example.helloworld;
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
     				  //Execute JUnit tests on project copy.
-    				  executeTests(projectCopyName);
+    				  executeTests(projectCopyName, directoryPath);
     				  
     				  //Clean up the project copy now that we're done with it
     				  deleteProject(projectCopyName);
@@ -116,7 +116,7 @@ package com.example.helloworld;
     	  }  
       }//end startButtonPressed()
       
-      private void executeTests(String projectCopyName)
+      private void executeTests(String projectCopyName, String directoryPath)
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin executeTests(): " + projectCopyName);
@@ -141,8 +141,8 @@ package com.example.helloworld;
 		    		  }
 		    		  
 		    		  //Create a file and print the results
-		    		  //String resultsFilePath = getResultsDirectory() + "/" + session.getLaunchedProject().getElementName() + " - " + + session.getTestResult(false) + ".txt";
-		    		  //printArrayListOfStringsToFile(resultsFilePath, results);
+		    		  String resultsFilePath = directoryPath + "/" + session.getLaunchedProject().getElementName() + " - " + session.getTestResult(false) + ".txt";
+		    		  printArrayListOfStringsToFile(resultsFilePath, results);
 		    		  
 		        	  System.out.println("End sessionFinished(): ");
 		        	  System.out.println("--------------------------------------------------------------------");
