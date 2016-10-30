@@ -97,6 +97,9 @@ package com.example.helloworld;
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
+    				  //Set up a listener that will be notified when a test launch finishes.
+    				  setUpTestRunListener(projectCopyName, directoryPath);
+    				  
     				  //Execute JUnit tests on project copy.
     				  executeTests(projectCopyName, directoryPath);
     				  
@@ -116,45 +119,46 @@ package com.example.helloworld;
     	  }  
       }//end startButtonPressed()
       
+      private void setUpTestRunListener(String projectCopyName, String directoryPath)
+      {
+    	  //Create a listener to listen for the completion of the tests, so the results can be logged.
+		  JUnitCore.addTestRunListener(new TestRunListener() {
+			  public void sessionFinished(ITestRunSession session) 
+	    	  {
+	        	  System.out.println("--------------------------------------------------------------------");
+	        	  System.out.println("Begin sessionFinished(): ");
+	        	
+	        	  //Create a temporary ArrayList to hold each line of the test results 
+		    	  ArrayList<String> results = new ArrayList<String>();
+	    		  
+	    		  //Loop through the test suites.
+	    		  ITestElement[] children = session.getChildren();
+	    		  for(ITestElement child : children)
+	    		  {
+	    			  results.add(child.toString() + "\n");
+	    		  }
+	    		  
+	    		  //Create a file and print the results
+	    		  String resultsFilePath = directoryPath + "/" + session.getLaunchedProject().getElementName() + " - " + session.getTestResult(false) + ".txt";
+	    		  printArrayListOfStringsToFile(resultsFilePath, results);
+	    		  
+	        	  System.out.println("End sessionFinished(): ");
+	        	  System.out.println("--------------------------------------------------------------------");
+	    	  }
+		  });
+      }
+      
       private void executeTests(String projectCopyName, String directoryPath)
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin executeTests(): " + projectCopyName);
     	  try
     	  {
-    		  //Create a listener to listen for the completion of the tests, so the results can be logged.
-    		  JUnitCore.addTestRunListener(new TestRunListener() {
-				  public void sessionFinished(ITestRunSession session) 
-		    	  {
-		        	  System.out.println("--------------------------------------------------------------------");
-		        	  System.out.println("Begin sessionFinished(): ");
-		        	
-		        	  //Create a temporary ArrayList to hold each line of the test results 
-			    	  ArrayList<String> results = new ArrayList<String>();
-		    		  results.add("Elapsed time in seconds: " + session.getElapsedTimeInSeconds() + "\n");
-		    		  
-		    		  //Loop through the test suites.
-		    		  ITestElement[] children = session.getChildren();
-		    		  for(ITestElement child : children)
-		    		  {
-		    			  results.add(child.toString() + "\n");
-		    		  }
-		    		  
-		    		  //Create a file and print the results
-		    		  String resultsFilePath = directoryPath + "/" + session.getLaunchedProject().getElementName() + " - " + session.getTestResult(false) + ".txt";
-		    		  printArrayListOfStringsToFile(resultsFilePath, results);
-		    		  
-		        	  System.out.println("End sessionFinished(): ");
-		        	  System.out.println("--------------------------------------------------------------------");
-		    	  }
-			  });
-    		  
     		  //Create a new launch configuration that will launch all JUnit tests.
 			  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
-			  //System.out.println("Run configuration name: " + launchConfiguration.getName());
-			  //System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
-			  //System.out.println("Test class: " );
-			  //System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+			  System.out.println("Run configuration name: " + launchConfiguration.getName());
+			  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+			  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
 			  
 			  //Launch the tests.
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
