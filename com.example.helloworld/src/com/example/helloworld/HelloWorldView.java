@@ -426,6 +426,7 @@ package com.example.helloworld;
 		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
 		  //Get the compilation units. Each ICompilationUnit represents a class.
 		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
+		  System.out.println("Breadcrumb: iCompilationUnits.length: " + iCompilationUnits.length);
 		  
 		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
 		  {
