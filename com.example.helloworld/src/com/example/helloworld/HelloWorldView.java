@@ -424,7 +424,8 @@ package com.example.helloworld;
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  System.out.println("Breadcrumb: javaProject: " + javaProject.toString());
-		  IPackageFragment package1 = javaProject.getPackageFragments()[0];
+		  IPackageFragment[] packageFragments = javaProject.getPackageFragments();
+		  IPackageFragment package1 = packageFragments[0];
 		  System.out.println("Breadcrumb: IPackageFragment package1: " + package1.toString());
 		  //Get the compilation units. Each ICompilationUnit represents a class.
 		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
