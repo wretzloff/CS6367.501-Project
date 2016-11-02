@@ -424,6 +424,7 @@ package com.example.helloworld;
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  System.out.println("Breadcrumb: javaProject: " + javaProject.toString());
+		  System.out.println("Breadcrumb: exists(): " + javaProject.exists());
 		  IPackageFragment[] packageFragments = javaProject.getPackageFragments();
 		  IPackageFragment package1 = packageFragments[0];
 		  System.out.println("Breadcrumb: IPackageFragment package1: " + package1.toString());
