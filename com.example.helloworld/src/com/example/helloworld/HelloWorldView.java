@@ -473,6 +473,11 @@ package com.example.helloworld;
 			  }//end for loop
 		  }
 		  
+		  if(mutations.size() == 0)
+		  {
+			  mutationPlanPath = mutationPlanPath + " - no mutations";
+		  }
+		  
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
 		  
