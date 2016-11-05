@@ -424,52 +424,55 @@ package com.example.helloworld;
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IPackageFragment[] packageFragments = javaProject.getPackageFragments();
-		  IPackageFragment package1 = packageFragments[0];
-		  //Get the compilation units. Each ICompilationUnit represents a class.
-		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-		  
-		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
+		  //IPackageFragment package1 = packageFragments[0];
+		  for(IPackageFragment packageFragment : packageFragments)
 		  {
-			  //Parse a CompilationUnit from the ICompilationUnit
-			  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
-			  AST ast = astRoot.getAST();
-			  ASTRewrite rewriter = ASTRewrite.create(ast);
-			  //Each TypeDeclaration also seems to represent a class
-			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
-			  //Type superclassType = typeDecl.getSuperclassType();
-			  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
-			  //Get all methods from the class
-			  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
-			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
+			  //Get the compilation units. Each ICompilationUnit represents a class.
+			  ICompilationUnit[] iCompilationUnits = packageFragment.getCompilationUnits();
+			  
+			  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
 			  {
-				  Block methodBody = methodDeclaration.getBody();
-				  if(methodBody != null)
+				  //Parse a CompilationUnit from the ICompilationUnit
+				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+				  AST ast = astRoot.getAST();
+				  ASTRewrite rewriter = ASTRewrite.create(ast);
+				  //Each TypeDeclaration also seems to represent a class
+				  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+				  //Type superclassType = typeDecl.getSuperclassType();
+				  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
+				  //Get all methods from the class
+				  MethodDeclaration[] methodDeclarations = typeDecl.getMethods();
+				  for (MethodDeclaration methodDeclaration : methodDeclarations) 
 				  {
-					  methodBody.accept(new ASTVisitor() 
-					  {  
-						  public boolean visit(PostfixExpression node) 
-						  {
-							  StringBuilder sb = new StringBuilder();
-							  IMethodBinding a = methodDeclaration.resolveBinding();
-							  ITypeBinding b = a.getDeclaringClass();
-							  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
-							  sb.append("Class name: " + b.getName() + "\n");
-							  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
-							  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
-							  sb.append("Start Position: " + node.getStartPosition() + "\n");
-							  sb.append("Length: " + node.getLength() + "\n");
-							  sb.append("Current source: " + node + "\n");
-							  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-							  sb.append("New source: " + node + "\n");
-							  sb.append("\n");
-							  mutations.add(sb.toString());
-							  return true; 
-						  }//end visit()
-					  });
-				  }
-				  
+					  Block methodBody = methodDeclaration.getBody();
+					  if(methodBody != null)
+					  {
+						  methodBody.accept(new ASTVisitor() 
+						  {  
+							  public boolean visit(PostfixExpression node) 
+							  {
+								  StringBuilder sb = new StringBuilder();
+								  IMethodBinding a = methodDeclaration.resolveBinding();
+								  ITypeBinding b = a.getDeclaringClass();
+								  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
+								  sb.append("Class name: " + b.getName() + "\n");
+								  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
+								  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
+								  sb.append("Start Position: " + node.getStartPosition() + "\n");
+								  sb.append("Length: " + node.getLength() + "\n");
+								  sb.append("Current source: " + node + "\n");
+								  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+								  sb.append("New source: " + node + "\n");
+								  sb.append("\n");
+								  mutations.add(sb.toString());
+								  return true; 
+							  }//end visit()
+						  });
+					  }
+					  
+				  }//end for loop
 			  }//end for loop
-		  }//end for loop
+		  }
 		  
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
