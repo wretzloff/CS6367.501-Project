@@ -422,16 +422,11 @@ package com.example.helloworld;
 		  ArrayList<String> mutations = new ArrayList<String>();
 		  
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-    	  System.out.println("Breadcrumb: projectCopy.exists(): " + projectCopy.exists());
-    	  System.out.println("Breadcrumb: projectCopy.isOpen(): " + projectCopy.isOpen());
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
-		  System.out.println("Breadcrumb: javaProject.exists(): " + javaProject.exists());
 		  IPackageFragment[] packageFragments = javaProject.getPackageFragments();
 		  IPackageFragment package1 = packageFragments[0];
-		  System.out.println("Breadcrumb: IPackageFragment package1: " + package1.toString());
 		  //Get the compilation units. Each ICompilationUnit represents a class.
 		  ICompilationUnit[] iCompilationUnits = package1.getCompilationUnits();
-		  System.out.println("Breadcrumb: iCompilationUnits.length: " + iCompilationUnits.length);
 		  
 		  for (ICompilationUnit iCompilationUnit : iCompilationUnits) 
 		  {
@@ -448,27 +443,31 @@ package com.example.helloworld;
 			  for (MethodDeclaration methodDeclaration : methodDeclarations) 
 			  {
 				  Block methodBody = methodDeclaration.getBody();
-				  methodBody.accept(new ASTVisitor() 
-				  {  
-					  public boolean visit(PostfixExpression node) 
-					  {
-						  StringBuilder sb = new StringBuilder();
-						  IMethodBinding a = methodDeclaration.resolveBinding();
-						  ITypeBinding b = a.getDeclaringClass();
-						  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
-						  sb.append("Class name: " + b.getName() + "\n");
-						  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
-						  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
-						  sb.append("Start Position: " + node.getStartPosition() + "\n");
-						  sb.append("Length: " + node.getLength() + "\n");
-						  sb.append("Current source: " + node + "\n");
-						  node.setOperator(PostfixExpression.Operator.toOperator("--"));
-						  sb.append("New source: " + node + "\n");
-						  sb.append("\n");
-						  mutations.add(sb.toString());
-						  return true; 
-					  }//end visit()
-				  });
+				  if(methodBody != null)
+				  {
+					  methodBody.accept(new ASTVisitor() 
+					  {  
+						  public boolean visit(PostfixExpression node) 
+						  {
+							  StringBuilder sb = new StringBuilder();
+							  IMethodBinding a = methodDeclaration.resolveBinding();
+							  ITypeBinding b = a.getDeclaringClass();
+							  sb.append("File Name: " + iCompilationUnit.getPath() + "\n");
+							  sb.append("Class name: " + b.getName() + "\n");
+							  sb.append("handleID: " + iCompilationUnit.getHandleIdentifier() + "\n");
+							  sb.append("Line: " + astRoot.getLineNumber(node.getStartPosition()) + "\n");
+							  sb.append("Start Position: " + node.getStartPosition() + "\n");
+							  sb.append("Length: " + node.getLength() + "\n");
+							  sb.append("Current source: " + node + "\n");
+							  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+							  sb.append("New source: " + node + "\n");
+							  sb.append("\n");
+							  mutations.add(sb.toString());
+							  return true; 
+						  }//end visit()
+					  });
+				  }
+				  
 			  }//end for loop
 		  }//end for loop
 		  
