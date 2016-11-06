@@ -100,6 +100,17 @@ package com.example.helloworld;
     				  //Set up a listener that will be notified when a test launch finishes.
     				  setUpTestRunListener(projectCopyName, directoryPath);
     				  
+    				  //Add JUnit to the project copy's build path
+    				  /*IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+        			  IJavaProject javaProject = JavaCore.create(projectCopy);
+    				  IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
+    				  IClasspathEntry[] newClasspath = new IClasspathEntry[rawClasspath.length + 1];
+    				  System.arraycopy(rawClasspath, 0, newClasspath, 0, rawClasspath.length);
+    				  Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4"); 
+    				  IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
+    				  newClasspath[rawClasspath.length] =junitEntry;
+    				  javaProject.setRawClasspath(newClasspath,null);*/
+    				  
     				  //Execute JUnit tests on project copy.
     				  executeTests(projectCopyName, directoryPath);
     				  
