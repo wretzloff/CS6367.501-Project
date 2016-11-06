@@ -132,6 +132,9 @@ package com.example.helloworld;
       
       private void setUpTestRunListener(String projectCopyName, String directoryPath)
       {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin setUpTestRunListener(): ");
+    	  
     	  //Create a listener to listen for the completion of the tests, so the results can be logged.
 		  JUnitCore.addTestRunListener(new TestRunListener() {
 			  public void sessionFinished(ITestRunSession session) 
@@ -157,6 +160,8 @@ package com.example.helloworld;
 	        	  System.out.println("--------------------------------------------------------------------");
 	    	  }
 		  });
+		  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("End setUpTestRunListener(): ");
       }
       
       private void executeTests(String projectCopyName, String directoryPath)
