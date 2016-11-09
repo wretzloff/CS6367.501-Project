@@ -86,58 +86,60 @@ package com.example.helloworld;
     				  String projectCopyName = projectName + "_mutant" + i;
     				  deleteProject(projectCopyName);
     				  copyProject(projectName, projectCopyName);
-    				  
-    				  //Parse the information needed from this mutation
-        			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
-    				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 4));
-    				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
-    				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
-    				  
-    				  //Modify the handle ID to point to the copy of the project instead of the original project
-    				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
-    				  
+    				
     				  //Error check: check that project copy exists
-    				  /*IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-    				  if(projectCopy.exists() == false);
+    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+    				  if(projectCopy.exists() == false)
     				  {
-    					  System.out.println("Project " + projectCopyName + " does not exist.");
-    					  System.exit(0);
-    				  }*/
-    				  
-    				  //Perform the specified mutation
-    				  replaceSourceCode(startPosition, length, newSource, handleId);
-    				  
-    				  //Set up a listener that will be notified when a test launch finishes.
-    				  setUpTestRunListener(projectCopyName, directoryPath);
-    				  
-    				  //Add JUnit to the project copy's build path
-    				  addJUnitToBuildPath(projectCopyName);
-
-    				  //Error check: check for build errors
-    				  /*boolean foundErrors = false;
-    				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-    				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
-    				  for (IMarker marker: markers)
-    				  {
-    					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
-    					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
-    					  {
-    						  System.out.println("Marker: " + marker.getResource());
-    						  foundErrors = true;
-    					  }
+    					  System.out.println("Project " + projectCopyName + " does not exist. Moving to next iteration.");
     				  }
-    				  if(foundErrors == true)
+    				  else
     				  {
-						  System.out.println("Build errors in project " + projectCopyName);
-    					  System.exit(0);
-    				  }*/
-  
-    				  //Execute JUnit tests on project copy.
-    				  executeTests(projectCopyName, directoryPath);
-    				  
-    				  //Clean up the project copy now that we're done with it
-    				  deleteProject(projectCopyName);
-    			  }  
+    					//Parse the information needed from this mutation
+            			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
+        				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 4));
+        				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
+        				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
+        				  
+        				  //Modify the handle ID to point to the copy of the project instead of the original project
+        				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
+        				  
+        				  //Perform the specified mutation
+        				  replaceSourceCode(startPosition, length, newSource, handleId);
+        				  
+        				  //Set up a listener that will be notified when a test launch finishes.
+        				  setUpTestRunListener(projectCopyName, directoryPath);
+        				  
+        				  //Add JUnit to the project copy's build path
+        				  addJUnitToBuildPath(projectCopyName);
+
+        				  //Error check: check for build errors
+        				  /*boolean foundErrors = false;
+        				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+        				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+        				  for (IMarker marker: markers)
+        				  {
+        					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
+        					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
+        					  {
+        						  System.out.println("Marker: " + marker.getResource());
+        						  foundErrors = true;
+        					  }
+        				  }
+        				  if(foundErrors == true)
+        				  {
+    						  System.out.println("Build errors in project " + projectCopyName);
+        					  System.exit(0);
+        				  }*/
+      
+        				  //Execute JUnit tests on project copy.
+        				  executeTests(projectCopyName, directoryPath);
+        				  
+        				  //Clean up the project copy now that we're done with it
+        				  deleteProject(projectCopyName);
+    				  }//end else
+    				 
+    			  	}//end for loop  
     		  } 
     		  catch (CoreException e) 
     		  {
@@ -356,12 +358,15 @@ package com.example.helloworld;
     	  } 
     	  catch (CoreException e) 
     	  {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-    	  } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    		  // TODO Auto-generated catch block
+    		  //e.printStackTrace();
+    		  System.out.println("CoreException: " + e.getMessage());
+    	  } 
+    	  catch (InterruptedException e) 
+    	  {
+    		  // TODO Auto-generated catch block
+    		  e.printStackTrace();
+    	  }
     	  
     	  System.out.println("End copyProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
