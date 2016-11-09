@@ -91,7 +91,7 @@ package com.example.helloworld;
     				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
     				  if(projectCopy.exists() == false)
     				  {
-    					  System.out.println("Project " + projectCopyName + " does not exist. Moving to next iteration.");
+    					  System.out.println("Failure to create mutant " + projectCopyName + ". Moving to next iteration.");
     				  }
     				  else
     				  {
