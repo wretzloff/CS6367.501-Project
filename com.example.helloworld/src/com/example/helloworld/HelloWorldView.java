@@ -350,7 +350,7 @@ package com.example.helloworld;
 	    	    //Check that the new project exists before exiting.
 	    	    while(clone.exists() == false);
 	    	    {
-	    	    	System.out.println("Project " + clone.getName() + " does not exist.");
+	    	    	System.out.println("Project " + clone.getName() + " not finished being created yet.");
 	    	    	Thread.sleep(5000);
 	    	    }
     	  } 
