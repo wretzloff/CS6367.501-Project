@@ -84,6 +84,7 @@ package com.example.helloworld;
     			  {
     				  //Create a copy of the target project so that it can be mutated
     				  String projectCopyName = projectName + "_mutant" + i;
+    				  //deleteProject(projectCopyName);
     				  copyProject(projectName, projectCopyName);
     				  
     				  //Parse the information needed from this mutation
@@ -346,12 +347,21 @@ package com.example.helloworld;
 	    	    cloneDescription.setReferencedProjects(projectDescription.getReferencedProjects());
 	    	    clone.setDescription(cloneDescription, null);
 	    	    
+	    	    //Check that the new project exists before exiting.
+	    	    while(clone.exists() == false);
+	    	    {
+	    	    	System.out.println("Project " + clone.getName() + " does not exist.");
+	    	    	Thread.sleep(5000);
+	    	    }
     	  } 
     	  catch (CoreException e) 
     	  {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-    	  }
+    	  } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	  
     	  System.out.println("End copyProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
