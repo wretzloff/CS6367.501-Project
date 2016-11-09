@@ -94,6 +94,14 @@ package com.example.helloworld;
     				  //Modify the handle ID to point to the copy of the project instead of the original project
     				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
     				  
+    				  //Error check: check that project copy exists
+    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+    				  if(projectCopy.exists() == false);
+    				  {
+    					  System.out.println("Project " + projectCopyName + " does not exist.");
+    					  System.exit(0);
+    				  }
+    				  
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
     				  
@@ -102,7 +110,26 @@ package com.example.helloworld;
     				  
     				  //Add JUnit to the project copy's build path
     				  addJUnitToBuildPath(projectCopyName);
-    				  
+
+    				  //Error check: check for build errors
+    				  /*boolean foundErrors = false;
+    				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+    				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+    				  for (IMarker marker: markers)
+    				  {
+    					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
+    					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
+    					  {
+    						  System.out.println("Marker: " + marker.getResource());
+    						  foundErrors = true;
+    					  }
+    				  }
+    				  if(foundErrors == true)
+    				  {
+						  System.out.println("Build errors in project " + projectCopyName);
+    					  System.exit(0);
+    				  }*/
+  
     				  //Execute JUnit tests on project copy.
     				  executeTests(projectCopyName, directoryPath);
     				  
