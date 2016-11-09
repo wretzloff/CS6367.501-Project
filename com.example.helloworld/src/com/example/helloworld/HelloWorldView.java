@@ -83,7 +83,8 @@ package com.example.helloworld;
     			  for (int i = 0; i < mutationPlans.size(); i++) 
     			  {
     				  //Create a copy of the target project so that it can be mutated
-    				  String projectCopyName = copyProject(projectName, "_mutant" + i);
+    				  String projectCopyName = projectName + "_mutant" + i;
+    				  copyProject(projectName, projectCopyName);
     				  
     				  //Parse the information needed from this mutation
         			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
@@ -95,12 +96,12 @@ package com.example.helloworld;
     				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
     				  
     				  //Error check: check that project copy exists
-    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+    				  /*IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
     				  if(projectCopy.exists() == false);
     				  {
     					  System.out.println("Project " + projectCopyName + " does not exist.");
     					  System.exit(0);
-    				  }
+    				  }*/
     				  
     				  //Perform the specified mutation
     				  replaceSourceCode(startPosition, length, newSource, handleId);
@@ -318,11 +319,10 @@ package com.example.helloworld;
       }
       
       //Given a project name, this method will create a copy of that project.
-      private String copyProject(String projectName, String nameAddition) 
+      private String copyProject(String projectName, String cloneName) 
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin copyProject(): " + projectName);
-    	  String cloneName = projectName + nameAddition;
 
     	  try 
     	  {
