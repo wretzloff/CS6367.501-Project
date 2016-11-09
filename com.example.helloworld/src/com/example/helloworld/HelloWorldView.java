@@ -101,15 +101,7 @@ package com.example.helloworld;
     				  setUpTestRunListener(projectCopyName, directoryPath);
     				  
     				  //Add JUnit to the project copy's build path
-    				  /*IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-        			  IJavaProject javaProject = JavaCore.create(projectCopy);
-    				  IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
-    				  IClasspathEntry[] newClasspath = new IClasspathEntry[rawClasspath.length + 1];
-    				  System.arraycopy(rawClasspath, 0, newClasspath, 0, rawClasspath.length);
-    				  Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4"); 
-    				  IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
-    				  newClasspath[rawClasspath.length] =junitEntry;
-    				  javaProject.setRawClasspath(newClasspath,null);*/
+    				  addJUnitToBuildPath(projectCopyName);
     				  
     				  //Execute JUnit tests on project copy.
     				  executeTests(projectCopyName, directoryPath);
@@ -129,6 +121,32 @@ package com.example.helloworld;
     		  textStatusArea.append("Please make a valid selection.\n");
     	  }  
       }//end startButtonPressed()
+      
+      private void addJUnitToBuildPath(String projectName)
+      {
+    	  System.out.println("--------------------------------------------------------------------");
+    	  System.out.println("Begin addJUnitToBuildPath(): ");
+    	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		  IJavaProject javaProject = JavaCore.create(projectCopy);
+		  IClasspathEntry[] rawClasspath;
+		  try 
+		  {
+			rawClasspath = javaProject.getRawClasspath();
+			IClasspathEntry[] newClasspath = new IClasspathEntry[rawClasspath.length + 1];
+			System.arraycopy(rawClasspath, 0, newClasspath, 0, rawClasspath.length);
+			Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4"); 
+			IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
+			newClasspath[rawClasspath.length] =junitEntry;
+			javaProject.setRawClasspath(newClasspath,null);
+		  } 
+		  catch (JavaModelException e) 
+		  {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		  }
+		  System.out.println("end addJUnitToBuildPath(): ");
+		  System.out.println("--------------------------------------------------------------------");
+      }//end addJUnitToBuildPath()
       
       private void setUpTestRunListener(String projectCopyName, String directoryPath)
       {
