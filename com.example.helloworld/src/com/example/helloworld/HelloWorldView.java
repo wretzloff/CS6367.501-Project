@@ -84,7 +84,7 @@ package com.example.helloworld;
     			  {
     				  //Create a copy of the target project so that it can be mutated
     				  String projectCopyName = projectName + "_mutant" + i;
-    				  //deleteProject(projectCopyName);
+    				  deleteProject(projectCopyName);
     				  copyProject(projectName, projectCopyName);
     				  
     				  //Parse the information needed from this mutation
