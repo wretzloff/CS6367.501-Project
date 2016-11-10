@@ -92,6 +92,9 @@ package com.example.helloworld;
     				  if(projectCopy.exists() == false)
     				  {
     					  System.out.println("Failure to create mutant " + projectCopyName + ". Moving to next iteration.");
+    					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_create_mutant.txt";
+    		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    		    		  
     				  }
     				  else
     				  {
