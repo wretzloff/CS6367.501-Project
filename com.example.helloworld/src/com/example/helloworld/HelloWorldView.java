@@ -115,7 +115,10 @@ package com.example.helloworld;
         				  
         				  //Add JUnit to the project copy's build path
         				  addJUnitToBuildPath(projectCopyName);
-
+        				  
+        				  //Create a new launch configuration that will launch all JUnit tests.
+        				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
+        				  
         				  //Error check: check for build errors
         				  /*boolean foundErrors = false;
         				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
@@ -136,7 +139,10 @@ package com.example.helloworld;
         				  }*/
       
         				  //Execute JUnit tests on project copy.
-        				  executeTests(projectCopyName, directoryPath);
+        				  executeTests(launchConfiguration, directoryPath);
+        				  
+        				  //Delete launch configuration now that we're done with it
+        				  launchConfiguration.delete();
         				  
         				  //Clean up the project copy now that we're done with it
         				  deleteProject(projectCopyName);
@@ -216,16 +222,15 @@ package com.example.helloworld;
     	  System.out.println("End setUpTestRunListener(): ");
       }
       
-      private void executeTests(String projectCopyName, String directoryPath)
+      private void executeTests(ILaunchConfiguration launchConfiguration, String directoryPath)
       {
-    	  System.out.println("--------------------------------------------------------------------");
-    	  System.out.println("Begin executeTests(): " + projectCopyName);
     	  try
     	  {
-    		  //Create a new launch configuration that will launch all JUnit tests.
-			  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
-			  System.out.println("Run configuration name: " + launchConfiguration.getName());
-			  System.out.println("Project: " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", ""));
+    		  String projectCopyName = launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
+    		  System.out.println("--------------------------------------------------------------------");
+        	  System.out.println("Begin executeTests(): " + projectCopyName);
+    		  System.out.println("Run configuration name: " + launchConfiguration.getName());
+			  System.out.println("Project: " + projectCopyName);
 			  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
 			  
 			  //Launch the tests.
@@ -255,8 +260,8 @@ package com.example.helloworld;
 				  }
 			  }
 			  
-			  //Delete launch configuration now that we're done with it
-			  launchConfiguration.delete();
+			  System.out.println("End executeTests(): " + projectCopyName);
+	    	  System.out.println("--------------------------------------------------------------------");
     	  }
     	  catch (CoreException e) 
     	  {
@@ -268,8 +273,6 @@ package com.example.helloworld;
 			e.printStackTrace();
     	  }
     	  
-    	  System.out.println("End executeTests(): " + projectCopyName);
-    	  System.out.println("--------------------------------------------------------------------");
       }//end executeTests()
       
       private void replaceSourceCode(int startPosition, int length, String newSource, String handleId)
