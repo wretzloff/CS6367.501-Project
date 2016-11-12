@@ -13,7 +13,8 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.dom.rewrite.*;
 	import org.eclipse.jdt.junit.*;
 	import org.eclipse.jdt.junit.model.*;
-	import org.eclipse.jface.text.*;
+import org.eclipse.jdt.junit.model.ITestElement.FailureTrace;
+import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	import org.eclipse.debug.core.*;
 	import org.eclipse.debug.core.model.IProcess;
@@ -203,11 +204,11 @@ package com.example.helloworld;
 	        	  //Create a temporary ArrayList to hold each line of the test results 
 		    	  ArrayList<String> results = new ArrayList<String>();
 	    		  
-	    		  //Loop through the test suites.
+		    	  //Loop through the test suites.
 	    		  ITestElement[] children = session.getChildren();
 	    		  for(ITestElement child : children)
 	    		  {
-	    			  results.add(child.toString() + "\n");
+	    			  extractResultsFromITestElement(child, results, "");
 	    		  }
 	    		  
 	    		  //Create a file and print the results
@@ -220,6 +221,37 @@ package com.example.helloworld;
 		  });
 		  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("End setUpTestRunListener(): ");
+      }
+      
+      private void extractResultsFromITestElement(ITestElement element, ArrayList<String> results, String tabs)
+      {
+    	  if(element instanceof ITestCaseElement)
+    	  {
+    		  ITestCaseElement testcase = (ITestCaseElement) element;
+    		  String printstring = tabs + testcase.getTestMethodName() + " " + testcase.getTestResult(true);
+    		  FailureTrace failureTrace = testcase.getFailureTrace();
+    		  if(failureTrace != null)
+    		  {
+    			  int firstTab = failureTrace.getTrace().indexOf('\t');
+    			  printstring = printstring + " " + failureTrace.getTrace().substring(0, firstTab);
+    		  }
+    		  else
+    		  {
+    			  printstring = printstring + "\n";
+    		  }
+    		  results.add(printstring);
+    	  }
+    	  else if (element instanceof ITestSuiteElement)
+		  {
+    		  results.add(tabs + element.toString() + "\n");
+    		  
+    		  ITestSuiteElement testsuite = (ITestSuiteElement) element;
+			  ITestElement[] children = testsuite.getChildren();
+			  for(ITestElement child : children)
+    		  {
+				  extractResultsFromITestElement(child, results, tabs + "\t");
+    		  }
+		  }
       }
       
       private void executeTests(ILaunchConfiguration launchConfiguration, String directoryPath)
