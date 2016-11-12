@@ -236,29 +236,30 @@ package com.example.helloworld;
 			  //Launch the tests.
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
 			  
-			  //Wait for the launch to complete.
+			  //Wait some time for the launch to complete, and if it hasn't completed, terminate it.
+			  Thread.sleep(10000);
 			  IProcess[] processes = launch.getProcesses();
 			  boolean processNotTerminated = false;
-			  while(true)
+			  for(IProcess process : processes)
 			  {
-				  Thread.sleep(10000);
-				  for(IProcess process : processes)
+				  if(process.isTerminated() == false)
 				  {
-					  if(process.isTerminated() == false)
-					  {
-						  processNotTerminated = true;  
-					  }
-				  }
-				  
-				  if(processNotTerminated)
-				  {
-					  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " still running.");
-				  }
-				  else
-				  {
-					  break;
+					  processNotTerminated = true;  
 				  }
 			  }
+			    
+			  if(processNotTerminated)
+			  {
+				  for(IProcess process : processes)
+				  {
+					  process.terminate();
+				  }  
+				  
+				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " timed out.");
+				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
+	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+			  }
+				  
 			  
 			  System.out.println("End executeTests(): " + projectCopyName);
 	    	  System.out.println("--------------------------------------------------------------------");
