@@ -121,7 +121,7 @@ import org.eclipse.jface.text.*;
         				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
         				  
         				  //Error check: check for build errors
-        				  /*boolean foundErrors = false;
+        				  boolean foundErrors = false;
         				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
         				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
         				  for (IMarker marker: markers)
@@ -136,8 +136,9 @@ import org.eclipse.jface.text.*;
         				  if(foundErrors == true)
         				  {
     						  System.out.println("Build errors in project " + projectCopyName);
-        					  System.exit(0);
-        				  }*/
+    						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
+        		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+        				  }
       
         				  //Execute JUnit tests on project copy.
         				  executeTests(launchConfiguration, directoryPath);
