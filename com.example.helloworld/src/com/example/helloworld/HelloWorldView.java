@@ -138,6 +138,7 @@ import org.eclipse.jface.text.*;
     						  System.out.println("Build errors in project " + projectCopyName);
     						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
         		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+        		    		  continue;
         				  }
       
         				  //Execute JUnit tests on project copy.
