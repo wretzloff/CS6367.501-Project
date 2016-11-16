@@ -553,6 +553,10 @@ import org.eclipse.jface.text.*;
 				  AST ast = astRoot.getAST();
 				  ASTRewrite rewriter = ASTRewrite.create(ast);
 				  //Each TypeDeclaration also seems to represent a class
+				  if(!(astRoot.types().get(0) instanceof TypeDeclaration))
+				  {
+					  continue;
+				  }
 				  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
 				  //Type superclassType = typeDecl.getSuperclassType();
 				  //FieldDeclaration[] fieldDeclarations = typeDecl.getFields();
