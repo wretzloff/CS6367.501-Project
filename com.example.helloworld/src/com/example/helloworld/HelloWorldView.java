@@ -36,6 +36,15 @@ import org.eclipse.jface.text.*;
       
 	   public void createPartControl(Composite parent) 
 	   {
+		   /*Composite top = new Composite(parent, SWT.NONE);
+		   GridLayout layout = new GridLayout();
+		   layout.numColumns = 2;
+		   top.setLayout(layout);
+			new Button(top, SWT.PUSH).setText("1");
+			new Button(top, SWT.PUSH).setText("2");
+			new Button(top, SWT.PUSH).setText("3");
+			new Button(top, SWT.PUSH).setText("4");		   
+		   */
 		   labelPrompt = new Label(parent, SWT.WRAP);
 		   labelPrompt.setText("Choose project to test: ");
          
