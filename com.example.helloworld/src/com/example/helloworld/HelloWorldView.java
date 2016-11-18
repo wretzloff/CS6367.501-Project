@@ -630,6 +630,7 @@ package com.example.helloworld;
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
 		  
+		  textStatusArea.append("Finished building mutation plan: " + mutationPlanPath + "\n");
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return mutations;
