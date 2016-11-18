@@ -22,10 +22,12 @@ package com.example.helloworld;
 
    public class HelloWorldView extends ViewPart 
    {
-	   Label labelPrompt;
+	   Label labelChooseProject;
+	   Label labelChooseTimeout;
 	   Combo comboProjectsList;
 	   Button buttonStart;
 	   Text textStatusArea;
+	   Text textTimeoutArea;
 	   String[] projectNamesArray;
 	   
 	   
@@ -47,11 +49,16 @@ package com.example.helloworld;
 		   leftLayout.numColumns = 1;
 		   left.setLayout(leftLayout);
 		   
-		   labelPrompt = new Label(left, SWT.WRAP);
-		   labelPrompt.setText("Choose project to test: ");
+		   labelChooseProject = new Label(left, SWT.WRAP);
+		   labelChooseProject.setText("Choose project to test: ");
 		   
 		   comboProjectsList = new Combo(left, SWT.DROP_DOWN);
 		   comboProjectsList.setItems(projectNamesArray);
+
+		   labelChooseTimeout = new Label(left, SWT.WRAP);
+		   labelChooseTimeout.setText("Specify timeout: ");
+		   
+		   textTimeoutArea = new Text(left, SWT.BORDER);
 		   
 		   buttonStart = new Button(left, SWT.WRAP);
 		   buttonStart.setText("Start");
@@ -69,7 +76,6 @@ package com.example.helloworld;
     	   	});
 		   
 		   textStatusArea = new Text(top, SWT.MULTI | SWT.BORDER );//| SWT.WRAP);
-		   //textStatusArea.setBounds(100, 50, 100, 20);
 		   
 		   GridData data = new GridData();
 		   data.verticalAlignment = SWT.RIGHT;
