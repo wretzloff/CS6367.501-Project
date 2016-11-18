@@ -170,7 +170,7 @@ package com.example.helloworld;
         				  }
       
         				  //Execute JUnit tests on project copy.
-        				  executeTests(launchConfiguration, directoryPath);//, timeout);
+        				  executeTests(launchConfiguration, directoryPath, timeout);
         				  
         				  //Delete launch configuration now that we're done with it
         				  launchConfiguration.delete();
@@ -284,7 +284,7 @@ package com.example.helloworld;
 		  }
       }
       
-      private void executeTests(ILaunchConfiguration launchConfiguration, String directoryPath)
+      private void executeTests(ILaunchConfiguration launchConfiguration, String directoryPath, int timeout)
       {
     	  try
     	  {
@@ -299,7 +299,7 @@ package com.example.helloworld;
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
 			  
 			  //Wait some time for the launch to complete, and if it hasn't completed, terminate it.
-			  Thread.sleep(10000);
+			  Thread.sleep(timeout);
 			  IProcess[] processes = launch.getProcesses();
 			  boolean processNotTerminated = false;
 			  for(IProcess process : processes)
@@ -317,7 +317,7 @@ package com.example.helloworld;
 					  process.terminate();
 				  }  
 				  
-				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " timed out.");
+				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
 			  }
