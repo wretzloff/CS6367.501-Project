@@ -294,6 +294,7 @@ package com.example.helloworld;
     		  System.out.println("Run configuration name: " + launchConfiguration.getName());
 			  System.out.println("Project: " + projectCopyName);
 			  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
+			  textStatusArea.append("Executing test cases for mutant " + projectCopyName + "\n");
 			  
 			  //Launch the tests.
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
@@ -317,12 +318,13 @@ package com.example.helloworld;
 					  process.terminate();
 				  }  
 				  
+				  textStatusArea.append("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout + "\n");
 				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
 			  }
 				  
-			  
+			  textStatusArea.append("Finished executing test cases for mutant " + projectCopyName + "\n");
 			  System.out.println("End executeTests(): " + projectCopyName);
 	    	  System.out.println("--------------------------------------------------------------------");
     	  }
