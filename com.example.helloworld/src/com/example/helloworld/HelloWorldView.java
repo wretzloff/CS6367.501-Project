@@ -395,7 +395,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin copyProject(): " + projectName);
-
+    	  textStatusArea.append("Creating mutant: " + cloneName + "\n");
     	  try 
     	  {
 				IProgressMonitor m = new NullProgressMonitor();
@@ -429,6 +429,7 @@ package com.example.helloworld;
     	  {
     		  // TODO Auto-generated catch block
     		  //e.printStackTrace();
+    		  textStatusArea.append("Error creating mutant: " + cloneName + "\n");
     		  System.out.println("CoreException: " + e.getMessage());
     	  } 
     	  catch (InterruptedException e) 
@@ -437,6 +438,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
+    	  textStatusArea.append("Finished creating mutant: " + cloneName + "\n");
     	  System.out.println("End copyProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return cloneName;
