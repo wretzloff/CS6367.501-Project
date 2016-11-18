@@ -59,6 +59,7 @@ package com.example.helloworld;
 		   labelChooseTimeout.setText("Specify timeout: ");
 		   
 		   textTimeoutArea = new Text(left, SWT.BORDER);
+		   textTimeoutArea.setText("10000");
 		   
 		   buttonStart = new Button(left, SWT.WRAP);
 		   buttonStart.setText("Start");
@@ -99,6 +100,7 @@ package com.example.helloworld;
     	  if(comboProjectsList.getSelectionIndex() >= 0)
     	  {
     		  String projectName = projectNamesArray[comboProjectsList.getSelectionIndex()];
+    		  int timeout = Integer.parseInt(textTimeoutArea.getText());
     		  try 
     		  {
     			  //Create a location to store the results of the mutation testing on this project.
@@ -168,7 +170,7 @@ package com.example.helloworld;
         				  }
       
         				  //Execute JUnit tests on project copy.
-        				  executeTests(launchConfiguration, directoryPath);
+        				  executeTests(launchConfiguration, directoryPath);//, timeout);
         				  
         				  //Delete launch configuration now that we're done with it
         				  launchConfiguration.delete();
