@@ -342,7 +342,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin replaceSourceCode(): " + handleId + " " + startPosition);
-    	  
+    	  textStatusArea.append("Replacing source code. \n");
     	  try 
     	  {
     		  //Get ahold of the ICompilationUnit represented by the handle ID
@@ -377,6 +377,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
+    	  textStatusArea.append("Finished replacing source code. \n");
     	  System.out.println("End replaceSourceCode(): "  + handleId + " " + startPosition);
     	  System.out.println("--------------------------------------------------------------------");
       }
