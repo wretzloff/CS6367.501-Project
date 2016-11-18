@@ -2,6 +2,7 @@ package com.example.helloworld;
 	
 	import org.eclipse.swt.widgets.*;
 	import org.eclipse.swt.SWT;
+	import org.eclipse.swt.layout.*;
 	import org.eclipse.ui.part.ViewPart;
 
 	import java.io.*;
@@ -13,8 +14,8 @@ package com.example.helloworld;
 	import org.eclipse.jdt.core.dom.rewrite.*;
 	import org.eclipse.jdt.junit.*;
 	import org.eclipse.jdt.junit.model.*;
-import org.eclipse.jdt.junit.model.ITestElement.FailureTrace;
-import org.eclipse.jface.text.*;
+	import org.eclipse.jdt.junit.model.ITestElement.FailureTrace;
+	import org.eclipse.jface.text.*;
 	import org.eclipse.text.edits.*;
 	import org.eclipse.debug.core.*;
 	import org.eclipse.debug.core.model.IProcess;
@@ -36,22 +37,23 @@ import org.eclipse.jface.text.*;
       
 	   public void createPartControl(Composite parent) 
 	   {
-		   /*Composite top = new Composite(parent, SWT.NONE);
+		   Composite top = new Composite(parent, SWT.NONE);
 		   GridLayout layout = new GridLayout();
 		   layout.numColumns = 2;
 		   top.setLayout(layout);
-			new Button(top, SWT.PUSH).setText("1");
-			new Button(top, SWT.PUSH).setText("2");
-			new Button(top, SWT.PUSH).setText("3");
-			new Button(top, SWT.PUSH).setText("4");		   
-		   */
-		   labelPrompt = new Label(parent, SWT.WRAP);
+
+		   Composite left = new Composite(top, SWT.BORDER);
+		   GridLayout leftLayout = new GridLayout();
+		   leftLayout.numColumns = 1;
+		   left.setLayout(leftLayout);
+		   
+		   labelPrompt = new Label(left, SWT.WRAP);
 		   labelPrompt.setText("Choose project to test: ");
-         
-		   comboProjectsList = new Combo(parent, SWT.DROP_DOWN);
+		   
+		   comboProjectsList = new Combo(left, SWT.DROP_DOWN);
 		   comboProjectsList.setItems(projectNamesArray);
-    	  
-		   buttonStart = new Button(parent, SWT.WRAP);
+		   
+		   buttonStart = new Button(left, SWT.WRAP);
 		   buttonStart.setText("Start");
 		   buttonStart.addListener(SWT.Selection, new Listener() 
 		   {
@@ -66,8 +68,17 @@ import org.eclipse.jface.text.*;
 			   }
     	   	});
 		   
-		   	textStatusArea = new Text(parent, SWT.WRAP | SWT.BORDER);
-		   	textStatusArea.setBounds(100, 50, 100, 20);
+		   textStatusArea = new Text(top, SWT.MULTI | SWT.BORDER );//| SWT.WRAP);
+		   //textStatusArea.setBounds(100, 50, 100, 20);
+		   
+		   GridData data = new GridData();
+		   data.verticalAlignment = SWT.RIGHT;
+		   data.grabExcessHorizontalSpace = true;
+		   data.grabExcessVerticalSpace = true;
+		   data.heightHint = 500;
+		   data.widthHint = 1000;
+		   textStatusArea.setLayoutData(data);
+		   
       }
       
       public void setFocus() 
