@@ -76,7 +76,7 @@ package com.example.helloworld;
 			   }
     	   	});
 		   
-		   textStatusArea = new Text(top, SWT.MULTI | SWT.BORDER );//| SWT.WRAP);
+		   textStatusArea = new Text(top, SWT.MULTI | SWT.BORDER |SWT.H_SCROLL | SWT.V_SCROLL);//| SWT.WRAP);
 		   
 		   GridData data = new GridData();
 		   data.verticalAlignment = SWT.RIGHT;
