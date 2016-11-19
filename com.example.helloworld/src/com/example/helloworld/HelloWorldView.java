@@ -95,6 +95,11 @@ package com.example.helloworld;
          // you would decide which one gets the focus.
       }
       
+      private void displayStatusMessage(String message)
+      {
+    	  textStatusArea.append(message + "\n");
+      }
+      
       public void startButtonPressed()
       {
     	  if(comboProjectsList.getSelectionIndex() >= 0)
@@ -189,7 +194,7 @@ package com.example.helloworld;
     	  }
     	  else
     	  {
-    		  textStatusArea.append("Please make a valid selection.\n");
+    		  displayStatusMessage("Please make a valid selection.");
     	  }  
       }//end startButtonPressed()
       
@@ -294,7 +299,7 @@ package com.example.helloworld;
     		  System.out.println("Run configuration name: " + launchConfiguration.getName());
 			  System.out.println("Project: " + projectCopyName);
 			  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
-			  textStatusArea.append("Executing test cases for mutant " + projectCopyName + "\n");
+			  displayStatusMessage("Executing test cases for mutant " + projectCopyName);
 			  
 			  //Launch the tests.
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
@@ -318,13 +323,13 @@ package com.example.helloworld;
 					  process.terminate();
 				  }  
 				  
-				  textStatusArea.append("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout + "\n");
+				  displayStatusMessage("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
 			  }
 				  
-			  textStatusArea.append("Finished executing test cases for mutant " + projectCopyName + "\n");
+			  displayStatusMessage("Finished executing test cases for mutant " + projectCopyName);
 			  System.out.println("End executeTests(): " + projectCopyName);
 	    	  System.out.println("--------------------------------------------------------------------");
     	  }
@@ -344,7 +349,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin replaceSourceCode(): " + handleId + " " + startPosition);
-    	  textStatusArea.append("Replacing source code. \n");
+    	  displayStatusMessage("Replacing source code.");
     	  try 
     	  {
     		  //Get ahold of the ICompilationUnit represented by the handle ID
@@ -379,7 +384,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  textStatusArea.append("Finished replacing source code. \n");
+    	  displayStatusMessage("Finished replacing source code.");
     	  System.out.println("End replaceSourceCode(): "  + handleId + " " + startPosition);
     	  System.out.println("--------------------------------------------------------------------");
       }
@@ -398,7 +403,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin copyProject(): " + projectName);
-    	  textStatusArea.append("Creating mutant: " + cloneName + "\n");
+    	  displayStatusMessage("Creating mutant: " + cloneName);
     	  try 
     	  {
 				IProgressMonitor m = new NullProgressMonitor();
@@ -432,7 +437,7 @@ package com.example.helloworld;
     	  {
     		  // TODO Auto-generated catch block
     		  //e.printStackTrace();
-    		  textStatusArea.append("Error creating mutant: " + cloneName + "\n");
+    		  displayStatusMessage("Error creating mutant: " + cloneName);
     		  System.out.println("CoreException: " + e.getMessage());
     	  } 
     	  catch (InterruptedException e) 
@@ -441,7 +446,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  textStatusArea.append("Finished creating mutant: " + cloneName + "\n");
+    	  displayStatusMessage("Finished creating mutant: " + cloneName);
     	  System.out.println("End copyProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return cloneName;
@@ -566,7 +571,7 @@ package com.example.helloworld;
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
     	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
-    	  textStatusArea.append("Building mutation plan: " + mutationPlanPath + "\n");
+    	  displayStatusMessage("Building mutation plan: " + mutationPlanPath);
     	  
 		  //We'll build the mutation plan as a list of Strings.
 		  ArrayList<String> mutations = new ArrayList<String>();
@@ -635,7 +640,7 @@ package com.example.helloworld;
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
 		  
-		  textStatusArea.append("Finished building mutation plan: " + mutationPlanPath + "\n");
+		  displayStatusMessage("Finished building mutation plan: " + mutationPlanPath);
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return mutations;
