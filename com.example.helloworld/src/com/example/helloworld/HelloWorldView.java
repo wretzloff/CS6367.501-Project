@@ -133,7 +133,7 @@ package com.example.helloworld;
     				  String projectCopyName = projectName + "_mutant" + i;
     				  
     				  //Delete any existing project with that name.
-    				  //deleteProject(projectCopyName);
+    				  deleteProject(projectCopyName);
     				  if(checkIfProjectExists(projectCopyName))
     				  {
     					  printStatusMessageToSTDOut(projectCopyName + ": Project already exists. Moving to next mutant.");
