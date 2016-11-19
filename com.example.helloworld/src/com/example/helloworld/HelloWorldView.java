@@ -123,6 +123,10 @@ package com.example.helloworld;
     		  {
     			  //Create a location to store the results of the mutation testing on this project.
     			  String directoryPath = createFolderForResults(projectName);
+    			
+    			  //Set up a listener that will be notified when a test launch finishes.
+				  setUpTestRunListener(directoryPath);
+    			  
     			  //Generate a mutation plan for this project.
     			  ArrayList<String> mutationPlans = createMutationPlan(projectName, directoryPath);
     			  
@@ -173,9 +177,6 @@ package com.example.helloworld;
     					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
     					  continue;
     				  }
-    				  
-    				  //Set up a listener that will be notified when a test launch finishes.
-    				  setUpTestRunListener(projectCopyName, directoryPath);
     				  
     				  //Add JUnit to the project copy's build path
     				  addJUnitToBuildPath(projectCopyName);
@@ -252,7 +253,7 @@ package com.example.helloworld;
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
       
-      private void setUpTestRunListener(String projectCopyName, String directoryPath)
+      private void setUpTestRunListener(String directoryPath)
       {
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  printStatusMessageToSTDOut("Begin setUpTestRunListener(): ");
