@@ -98,6 +98,10 @@ package com.example.helloworld;
       private void displayStatusMessage(String message)
       {
     	  textStatusArea.append(message + "\n");
+    	  //int a = ((GridData)textStatusArea.getLayoutData()).heightHint;
+    	  //System.out.println("aaa  " + a);
+    	  //a++;
+    	  //((GridData)textStatusArea.getLayoutData()).heightHint = a;
       }
       
       public void startButtonPressed()
@@ -299,7 +303,7 @@ package com.example.helloworld;
     		  System.out.println("Run configuration name: " + launchConfiguration.getName());
 			  System.out.println("Project: " + projectCopyName);
 			  System.out.println("Run configuration type: " + launchConfiguration.getType().getName());
-			  displayStatusMessage("Executing test cases for mutant " + projectCopyName);
+			  displayStatusMessage(projectCopyName + ": Executing test cases.");
 			  
 			  //Launch the tests.
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
@@ -323,13 +327,13 @@ package com.example.helloworld;
 					  process.terminate();
 				  }  
 				  
-				  displayStatusMessage("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
+				  displayStatusMessage(projectCopyName + ": Tests exceded timeout: " + timeout);
 				  System.out.println("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
 			  }
 				  
-			  displayStatusMessage("Finished executing test cases for mutant " + projectCopyName);
+			  displayStatusMessage(projectCopyName + ": Finished executing test cases.");
 			  System.out.println("End executeTests(): " + projectCopyName);
 	    	  System.out.println("--------------------------------------------------------------------");
     	  }
@@ -403,7 +407,7 @@ package com.example.helloworld;
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin copyProject(): " + projectName);
-    	  displayStatusMessage("Creating mutant: " + cloneName);
+    	  displayStatusMessage(cloneName + ": Creating mutant.");
     	  try 
     	  {
 				IProgressMonitor m = new NullProgressMonitor();
@@ -437,7 +441,7 @@ package com.example.helloworld;
     	  {
     		  // TODO Auto-generated catch block
     		  //e.printStackTrace();
-    		  displayStatusMessage("Error creating mutant: " + cloneName);
+    		  displayStatusMessage(cloneName + ": Error creating mutant.");
     		  System.out.println("CoreException: " + e.getMessage());
     	  } 
     	  catch (InterruptedException e) 
@@ -446,7 +450,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  displayStatusMessage("Finished creating mutant: " + cloneName);
+    	  displayStatusMessage(cloneName + ": Finished creating mutant.");
     	  System.out.println("End copyProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return cloneName;
@@ -472,6 +476,7 @@ package com.example.helloworld;
     			  e.printStackTrace();
     		  }
     	  }
+    	  project.exists();
     	  System.out.println("End deleteProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
       }
@@ -571,7 +576,7 @@ package com.example.helloworld;
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin createMutationPlan(): " + projectName);
     	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
-    	  displayStatusMessage("Building mutation plan: " + mutationPlanPath);
+    	  displayStatusMessage(projectName + ": Building mutation plan: " + mutationPlanPath);
     	  
 		  //We'll build the mutation plan as a list of Strings.
 		  ArrayList<String> mutations = new ArrayList<String>();
@@ -640,7 +645,7 @@ package com.example.helloworld;
 		  //Create a file and print the plan
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
 		  
-		  displayStatusMessage("Finished building mutation plan: " + mutationPlanPath);
+		  displayStatusMessage(projectName + ": Finished building mutation plan: " + mutationPlanPath);
     	  System.out.println("End createMutationPlan(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
     	  return mutations;
