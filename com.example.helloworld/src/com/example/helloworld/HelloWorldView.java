@@ -458,27 +458,42 @@ package com.example.helloworld;
       }//end copyProject()
       
       //Given a project name, this method will create a copy of that project.
-      private void deleteProject(String projectName) 
+      private boolean deleteProject(String projectName) 
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin deleteProject(): " + projectName);
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  if(project.exists())
     	  {
-    		  System.out.println("Project " + projectName + " exists. It is being deleted.");
+    		  System.out.println(projectName + ": Deleting project.");
+    		  displayStatusMessage(projectName + ": Deleting project.");
     		  try 
     		  {
     			  project.delete(true, null);
+    			  
+    			  //Do not proceed until the we ensure that the project no longer exists.
+    	    	  while(project.exists())
+    	    	  {
+    	    		  System.out.println(projectName + ": pending deletion.");
+    	    		  displayStatusMessage(projectName + ": pending deletion.");
+    	    		  Thread.sleep(10000);
+    	    		  
+    	    	  }
     		  } 
-    		  catch (CoreException e) 
+    		  catch (CoreException | InterruptedException e) 
     		  {
     			  // TODO Auto-generated catch block
-    			  e.printStackTrace();
-    		  }
+    			  //e.printStackTrace();
+    			  System.out.println(e.getMessage());
+    			  return false;
+    		  } 
+    		  
     	  }
-    	  project.exists();
+    	  
+    	  displayStatusMessage(projectName + ": Finished deleting project.");
     	  System.out.println("End deleteProject(): " + projectName);
     	  System.out.println("--------------------------------------------------------------------");
+    	  return true;
       }
       
       //Return an array of the names of the projects available in the workspace.
