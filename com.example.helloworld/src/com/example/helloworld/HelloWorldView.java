@@ -282,8 +282,8 @@ package com.example.helloworld;
 	        	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
 	    	  }
 		  });
-		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  printStatusMessageToSTDOut("End setUpTestRunListener(): ");
+		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }
       
       private void extractResultsFromITestElement(ITestElement element, ArrayList<String> results, String tabs)
