@@ -396,7 +396,9 @@ package com.example.helloworld;
     	  catch (JavaModelException e) 
     	  {
     		  // TODO Auto-generated catch block
-    		  e.printStackTrace();
+    		  //e.printStackTrace();
+    		  displayStatusMessage(projectName + ": Error modifing source code.");
+    		  printStatusMessageToSTDOut("Exception: " + e.getMessage());
     	  }
     	  
     	  displayStatusMessage(projectName + ": Finished replacing source code.");
