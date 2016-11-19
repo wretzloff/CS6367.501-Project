@@ -188,7 +188,7 @@ package com.example.helloworld;
         				  }
       
         				  //Execute JUnit tests on project copy.
-        				  executeTests(launchConfiguration, directoryPath, timeout);
+        				  executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
         				  
         				  //Delete launch configuration now that we're done with it
         				  launchConfiguration.delete();
@@ -302,11 +302,10 @@ package com.example.helloworld;
 		  }
       }
       
-      private void executeTests(ILaunchConfiguration launchConfiguration, String directoryPath, int timeout)
+      private void executeTests(String projectCopyName, ILaunchConfiguration launchConfiguration, String directoryPath, int timeout)
       {
     	  try
     	  {
-    		  String projectCopyName = launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
     		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
         	  printStatusMessageToSTDOut("Begin executeTests(): " + projectCopyName);
     		  printStatusMessageToSTDOut("Run configuration name: " + launchConfiguration.getName());
@@ -346,15 +345,11 @@ package com.example.helloworld;
 			  printStatusMessageToSTDOut("End executeTests(): " + projectCopyName);
 	    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  }
-    	  catch (CoreException e) 
+    	  catch (CoreException | InterruptedException e ) 
     	  {
   			// TODO Auto-generated catch block
-  			e.printStackTrace();
-    	  } catch (InterruptedException e) 
-    	  {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-    	  }
+    		  printStatusMessageToSTDOut("ExecuteTests() exception: " + projectCopyName + " " + e.getMessage());
+    	  } 
     	  
       }//end executeTests()
       
