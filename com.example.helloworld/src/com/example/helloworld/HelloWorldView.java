@@ -129,9 +129,19 @@ package com.example.helloworld;
     			  //For each mutation in the mutation plan
     			  for (int i = 0; i < mutationPlans.size(); i++) 
     			  {
-    				  //Create a copy of the target project so that it can be mutated
+    				  //Create mutant project name.
     				  String projectCopyName = projectName + "_mutant" + i;
-    				  deleteProject(projectCopyName);
+    				  
+    				  //Delete any existing project with that name.
+    				  //deleteProject(projectCopyName);
+    				  if(checkIfProjectExists(projectCopyName))
+    				  {
+    					  printStatusMessageToSTDOut(projectCopyName + ": Project already exists. Moving to next mutant.");
+    					  displayStatusMessage(projectCopyName + ": Project already exists. Moving to next mutant.");
+    					  continue;
+    				  }
+    				  
+    				  //Create a copy of the target project so that it can be mutated
     				  copyProject(projectName, projectCopyName);
     				
     				  //Error check: check that project copy exists
@@ -466,13 +476,14 @@ package com.example.helloworld;
       {
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  printStatusMessageToSTDOut("Begin deleteProject(): " + projectName);
-    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-    	  if(project.exists())
+    	  
+    	  if(checkIfProjectExists(projectName))
     	  {
     		  printStatusMessageToSTDOut("" + projectName + ": Deleting project.");
     		  displayStatusMessage(projectName + ": Deleting project.");
     		  try 
     		  {
+    			  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     			  project.delete(true, null);
     			  
     			  //Do not proceed until the we ensure that the project no longer exists.
@@ -496,6 +507,19 @@ package com.example.helloworld;
     	  displayStatusMessage(projectName + ": Finished deleting project.");
     	  printStatusMessageToSTDOut("End deleteProject(): " + projectName);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+      }
+      
+      private boolean checkIfProjectExists(String projectName)
+      {
+    	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+    	  if(project.exists())
+    	  {
+    		  return true;
+    	  }
+    	  else
+    	  {
+    		  return false;
+    	  }
       }
       
       //Return an array of the names of the projects available in the workspace.
