@@ -448,24 +448,18 @@ package com.example.helloworld;
 	    	    	Thread.sleep(5000);
 	    	    }
     	  } 
-    	  catch (CoreException e) 
+    	  catch (CoreException | InterruptedException e) 
     	  {
     		  // TODO Auto-generated catch block
     		  //e.printStackTrace();
     		  displayStatusMessage(cloneName + ": Error creating mutant.");
     		  printStatusMessageToSTDOut("CoreException: " + e.getMessage());
     	  } 
-    	  catch (InterruptedException e) 
-    	  {
-    		  // TODO Auto-generated catch block
-    		  e.printStackTrace();
-    	  }
     	  
     	  displayStatusMessage(cloneName + ": Finished creating mutant.");
     	  printStatusMessageToSTDOut("End copyProject(): " + projectName);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
-    	  return cloneName;
-    	    
+    	  return cloneName;  
       }//end copyProject()
       
       //Given a project name, this method will create a copy of that project.
