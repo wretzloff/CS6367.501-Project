@@ -146,7 +146,7 @@ package com.example.helloworld;
         				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
         				  
         				  //Perform the specified mutation
-        				  replaceSourceCode(startPosition, length, newSource, handleId);
+        				  replaceSourceCode(projectCopyName, startPosition, length, newSource, handleId);
         				  
         				  //Set up a listener that will be notified when a test launch finishes.
         				  setUpTestRunListener(projectCopyName, directoryPath);
@@ -349,11 +349,11 @@ package com.example.helloworld;
     	  
       }//end executeTests()
       
-      private void replaceSourceCode(int startPosition, int length, String newSource, String handleId)
+      private void replaceSourceCode(String projectName, int startPosition, int length, String newSource, String handleId)
       {
     	  System.out.println("--------------------------------------------------------------------");
     	  System.out.println("Begin replaceSourceCode(): " + handleId + " " + startPosition);
-    	  displayStatusMessage("Replacing source code.");
+    	  displayStatusMessage(projectName + ": Replacing source code.");
     	  try 
     	  {
     		  //Get ahold of the ICompilationUnit represented by the handle ID
@@ -388,7 +388,7 @@ package com.example.helloworld;
     		  e.printStackTrace();
     	  }
     	  
-    	  displayStatusMessage("Finished replacing source code.");
+    	  displayStatusMessage(projectName + ": Finished replacing source code.");
     	  System.out.println("End replaceSourceCode(): "  + handleId + " " + startPosition);
     	  System.out.println("--------------------------------------------------------------------");
       }
