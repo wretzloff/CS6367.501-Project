@@ -171,15 +171,23 @@ package com.example.helloworld;
     				  replaceSourceCode(projectCopyName, startPosition, length, newSource, handleId);
     				  if(!verifySourceCode(projectCopyName, startPosition, newSource, handleId))
     				  {
-    					  printStatusMessageToSTDOut(projectCopyName + ": Failed to modify source code.");
-    					  displayStatusMessage(projectCopyName + ": Failed to modify source code.");
+    					  printStatusMessageToSTDOut(projectCopyName + ": Failed to modify source code. Moving to next mutant.");
+    					  displayStatusMessage(projectCopyName + ": Failed to modify source code. Moving to next mutant.");
     					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_modify_source.txt";
     					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
     					  continue;
     				  }
     				  
     				  //Add JUnit to the project copy's build path
-    				  addJUnitToBuildPath(projectCopyName);
+    				  //addJUnitToBuildPath(projectCopyName);
+    				  if(!buildPathContainsJUnit(projectCopyName))
+    				  {
+    					  printStatusMessageToSTDOut(projectCopyName + ": JUnit not available. Moving to next mutant.");
+    					  displayStatusMessage(projectCopyName + ": JUnit not available. Moving to next mutant.");
+    					  String filePath = directoryPath + "/" + projectCopyName + " - JUnit_not_available.txt";
+    					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    					  continue;
+    				  }
     				  
     				  //Create a new launch configuration that will launch all JUnit tests.
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
@@ -254,6 +262,32 @@ package com.example.helloworld;
 		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): ");
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
+      
+      private boolean buildPathContainsJUnit(String projectName)
+      {
+    	  boolean returnValue = false;
+    	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		  IJavaProject javaProject = JavaCore.create(projectCopy);
+		  try 
+		  {
+			  IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
+			  for(IClasspathEntry item : rawClasspath)
+			  {
+				  if(item.getPath().toString().contains("org.eclipse.jdt.junit.JUNIT_CONTAINER"))
+				  {
+					  returnValue = true;
+				  }
+			  }
+		  }
+		  catch (JavaModelException e) 
+		  {
+			  // TODO Auto-generated catch block
+			  //e.printStackTrace();
+    		  printStatusMessageToSTDOut(projectName + " Exception: " + e.getMessage());
+		  }
+		  
+		  return returnValue;
+      }
       
       private void setUpTestRunListener(String directoryPath)
       {
