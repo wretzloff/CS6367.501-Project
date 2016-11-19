@@ -132,81 +132,78 @@ package com.example.helloworld;
     				  //Create mutant project name.
     				  String projectCopyName = projectName + "_mutant" + i;
     				  
+    				  //Parse the information needed from this mutation
+        			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
+    				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 4));
+    				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
+    				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
+    				  
+    				  //Modify the handle ID to point to the copy of the project instead of the original project
+    				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
+    				  
     				  //Delete any existing project with that name.
     				  deleteProject(projectCopyName);
     				  if(checkIfProjectExists(projectCopyName))
     				  {
     					  printStatusMessageToSTDOut(projectCopyName + ": Project already exists. Moving to next mutant.");
     					  displayStatusMessage(projectCopyName + ": Project already exists. Moving to next mutant.");
+    					  String filePath = directoryPath + "/" + projectCopyName + " - project_already_exists.txt";
+    					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
     					  continue;
     				  }
     				  
     				  //Create a copy of the target project so that it can be mutated
     				  copyProject(projectName, projectCopyName);
-    				
-    				  //Error check: check that project copy exists
-    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-    				  if(projectCopy.exists() == false)
+    				  if(!checkIfProjectExists(projectCopyName))
     				  {
-    					  printStatusMessageToSTDOut("Failure to create mutant " + projectCopyName + ". Moving to next iteration.");
+    					  printStatusMessageToSTDOut(projectCopyName + ": Project could not be created. Moving to next mutant.");
+    					  displayStatusMessage(projectCopyName + ": Project could not be created. Moving to next mutant.");
     					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_create_mutant.txt";
-    		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
-    		    		  
+    					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    					  continue;
     				  }
-    				  else
+    				  
+    				  //Perform the specified mutation
+    				  replaceSourceCode(projectCopyName, startPosition, length, newSource, handleId);
+    				  
+    				  //Set up a listener that will be notified when a test launch finishes.
+    				  setUpTestRunListener(projectCopyName, directoryPath);
+    				  
+    				  //Add JUnit to the project copy's build path
+    				  addJUnitToBuildPath(projectCopyName);
+    				  
+    				  //Create a new launch configuration that will launch all JUnit tests.
+    				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
+    				  
+    				  //Error check: check for build errors
+    				  boolean foundErrors = false;
+    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
+    				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+    				  for (IMarker marker: markers)
     				  {
-    					//Parse the information needed from this mutation
-            			  String handleId = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 2);
-        				  int startPosition = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 4));
-        				  int length = Integer.parseInt(getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 5));
-        				  String newSource = getIthPieceOfDataFromMutationPlanString(mutationPlans.get(i), 7);
-        				  
-        				  //Modify the handle ID to point to the copy of the project instead of the original project
-        				  handleId = handleId.replaceFirst("=" + projectName + "/", "=" + projectCopyName + "/");
-        				  
-        				  //Perform the specified mutation
-        				  replaceSourceCode(projectCopyName, startPosition, length, newSource, handleId);
-        				  
-        				  //Set up a listener that will be notified when a test launch finishes.
-        				  setUpTestRunListener(projectCopyName, directoryPath);
-        				  
-        				  //Add JUnit to the project copy's build path
-        				  addJUnitToBuildPath(projectCopyName);
-        				  
-        				  //Create a new launch configuration that will launch all JUnit tests.
-        				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
-        				  
-        				  //Error check: check for build errors
-        				  boolean foundErrors = false;
-        				  projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-        				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
-        				  for (IMarker marker: markers)
-        				  {
-        					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
-        					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
-        					  {
-        						  printStatusMessageToSTDOut("Marker: " + marker.getResource());
-        						  foundErrors = true;
-        					  }
-        				  }
-        				  if(foundErrors == true)
-        				  {
-    						  printStatusMessageToSTDOut("Build errors in project " + projectCopyName);
-    						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
-        		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
-        		    		  continue;
-        				  }
-      
-        				  //Execute JUnit tests on project copy.
-        				  executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
-        				  
-        				  //Delete launch configuration now that we're done with it
-        				  launchConfiguration.delete();
-        				  
-        				  //Clean up the project copy now that we're done with it
-        				  deleteProject(projectCopyName);
-    				  }//end else
-    				 
+    					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
+    					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
+    					  {
+    						  printStatusMessageToSTDOut("Marker: " + marker.getResource());
+    						  foundErrors = true;
+    					  }
+    				  }
+    				  if(foundErrors == true)
+    				  {
+						  printStatusMessageToSTDOut("Build errors in project " + projectCopyName);
+						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
+    		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    		    		  continue;
+    				  }
+  
+    				  //Execute JUnit tests on project copy.
+    				  executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
+    				  
+    				  //Delete launch configuration now that we're done with it
+    				  launchConfiguration.delete();
+    				  
+    				  //Clean up the project copy now that we're done with it
+    				  deleteProject(projectCopyName);
     			  	}//end for loop  
     		  } 
     		  catch (CoreException e) 
