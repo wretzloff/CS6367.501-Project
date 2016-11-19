@@ -462,7 +462,7 @@ package com.example.helloworld;
       }//end copyProject()
       
       //Given a project name, this method will create a copy of that project.
-      private boolean deleteProject(String projectName) 
+      private void deleteProject(String projectName) 
       {
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  printStatusMessageToSTDOut("Begin deleteProject(): " + projectName);
@@ -488,8 +488,7 @@ package com.example.helloworld;
     		  {
     			  // TODO Auto-generated catch block
     			  //e.printStackTrace();
-    			  printStatusMessageToSTDOut("" + e.getMessage());
-    			  return false;
+    			  printStatusMessageToSTDOut("deleteProject(): " + projectName + " " + e.getMessage());
     		  } 
     		  
     	  }
@@ -497,7 +496,6 @@ package com.example.helloworld;
     	  displayStatusMessage(projectName + ": Finished deleting project.");
     	  printStatusMessageToSTDOut("End deleteProject(): " + projectName);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
-    	  return true;
       }
       
       //Return an array of the names of the projects available in the workspace.
