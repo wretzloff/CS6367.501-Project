@@ -165,6 +165,14 @@ package com.example.helloworld;
     				  
     				  //Perform the specified mutation
     				  replaceSourceCode(projectCopyName, startPosition, length, newSource, handleId);
+    				  if(!verifySourceCode(projectCopyName, startPosition, newSource, handleId))
+    				  {
+    					  printStatusMessageToSTDOut(projectCopyName + ": Failed to modify source code.");
+    					  displayStatusMessage(projectCopyName + ": Failed to modify source code.");
+    					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_modify_source.txt";
+    					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    					  continue;
+    				  }
     				  
     				  //Set up a listener that will be notified when a test launch finishes.
     				  setUpTestRunListener(projectCopyName, directoryPath);
@@ -404,6 +412,39 @@ package com.example.helloworld;
     	  displayStatusMessage(projectName + ": Finished replacing source code.");
     	  printStatusMessageToSTDOut("End replaceSourceCode(): "  + handleId + " " + startPosition);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+      }
+      
+      private boolean verifySourceCode(String projectName, int startPosition, String newSource, String handleId)
+      {
+    	  boolean returnValue = false;
+    	  
+		  try 
+    	  {
+			  int length = newSource.length();
+	    	  
+	    	  //Get ahold of the ICompilationUnit represented by the handle ID
+	    	  ICompilationUnit iCompilationUnit = (ICompilationUnit)JavaCore.create(handleId);
+	    	  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+			  AST ast = astRoot.getAST();
+			  TypeDeclaration typeDecl = (TypeDeclaration) astRoot.types().get(0);
+			
+			  //Find the target node
+			  NodeFinder myNodeFinder = new NodeFinder(typeDecl, startPosition, length);
+			  ASTNode oldNode = myNodeFinder.getCoveredNode();
+			  
+			  //Check for equivalency
+			  if(oldNode.toString().equals(newSource))
+			  {
+				  returnValue = true;
+			  }
+    	  }
+		  catch(Exception e)
+		  {
+			  printStatusMessageToSTDOut(projectName + " verifySourceCode() exception: " + e.getMessage());
+		  }
+    	  
+		  
+    	  return returnValue;
       }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
