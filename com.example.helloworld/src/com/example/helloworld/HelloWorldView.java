@@ -7,6 +7,7 @@ package com.example.helloworld;
 
 	import java.io.*;
 	import java.util.*;
+	import java.text.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
 	import org.eclipse.jdt.core.*;
@@ -104,6 +105,14 @@ package com.example.helloworld;
     	  //((GridData)textStatusArea.getLayoutData()).heightHint = a;
       }
       
+      private void printStatusMessageToSTDOut(String message)
+      {
+    	  Date date = new Date();
+    	  DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+    	  String dateFormatted = formatter.format(date);
+    	  System.out.println("[MUTANTDEBUG] [" + dateFormatted + "] " + message);
+      }
+      
       public void startButtonPressed()
       {
     	  if(comboProjectsList.getSelectionIndex() >= 0)
@@ -129,7 +138,7 @@ package com.example.helloworld;
     				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
     				  if(projectCopy.exists() == false)
     				  {
-    					  System.out.println("[MUTANTDEBUG]Failure to create mutant " + projectCopyName + ". Moving to next iteration.");
+    					  printStatusMessageToSTDOut("Failure to create mutant " + projectCopyName + ". Moving to next iteration.");
     					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_create_mutant.txt";
     		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
     		    		  
@@ -166,13 +175,13 @@ package com.example.helloworld;
         					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
         					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
         					  {
-        						  System.out.println("[MUTANTDEBUG]Marker: " + marker.getResource());
+        						  printStatusMessageToSTDOut("Marker: " + marker.getResource());
         						  foundErrors = true;
         					  }
         				  }
         				  if(foundErrors == true)
         				  {
-    						  System.out.println("[MUTANTDEBUG]Build errors in project " + projectCopyName);
+    						  printStatusMessageToSTDOut("Build errors in project " + projectCopyName);
     						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
         		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
         		    		  continue;
@@ -204,8 +213,8 @@ package com.example.helloworld;
       
       private void addJUnitToBuildPath(String projectName)
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin addJUnitToBuildPath(): ");
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin addJUnitToBuildPath(): ");
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IClasspathEntry[] rawClasspath;
@@ -224,21 +233,21 @@ package com.example.helloworld;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		  }
-		  System.out.println("[MUTANTDEBUG]end addJUnitToBuildPath(): ");
-		  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): ");
+		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
       
       private void setUpTestRunListener(String projectCopyName, String directoryPath)
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin setUpTestRunListener(): ");
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin setUpTestRunListener(): ");
     	  
     	  //Create a listener to listen for the completion of the tests, so the results can be logged.
 		  JUnitCore.addTestRunListener(new TestRunListener() {
 			  public void sessionFinished(ITestRunSession session) 
 	    	  {
-	        	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-	        	  System.out.println("[MUTANTDEBUG]Begin sessionFinished(): ");
+	        	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+	        	  printStatusMessageToSTDOut("Begin sessionFinished(): ");
 	        	
 	        	  //Create a temporary ArrayList to hold each line of the test results 
 		    	  ArrayList<String> results = new ArrayList<String>();
@@ -254,12 +263,12 @@ package com.example.helloworld;
 	    		  String resultsFilePath = directoryPath + "/" + session.getLaunchedProject().getElementName() + " - " + session.getTestResult(false) + ".txt";
 	    		  printArrayListOfStringsToFile(resultsFilePath, results);
 	    		  
-	        	  System.out.println("[MUTANTDEBUG]End sessionFinished(): ");
-	        	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+	        	  printStatusMessageToSTDOut("End sessionFinished(): ");
+	        	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
 	    	  }
 		  });
-		  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]End setUpTestRunListener(): ");
+		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End setUpTestRunListener(): ");
       }
       
       private void extractResultsFromITestElement(ITestElement element, ArrayList<String> results, String tabs)
@@ -298,11 +307,11 @@ package com.example.helloworld;
     	  try
     	  {
     		  String projectCopyName = launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
-    		  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-        	  System.out.println("[MUTANTDEBUG]Begin executeTests(): " + projectCopyName);
-    		  System.out.println("[MUTANTDEBUG]Run configuration name: " + launchConfiguration.getName());
-			  System.out.println("[MUTANTDEBUG]Project: " + projectCopyName);
-			  System.out.println("[MUTANTDEBUG]Run configuration type: " + launchConfiguration.getType().getName());
+    		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+        	  printStatusMessageToSTDOut("Begin executeTests(): " + projectCopyName);
+    		  printStatusMessageToSTDOut("Run configuration name: " + launchConfiguration.getName());
+			  printStatusMessageToSTDOut("Project: " + projectCopyName);
+			  printStatusMessageToSTDOut("Run configuration type: " + launchConfiguration.getType().getName());
 			  displayStatusMessage(projectCopyName + ": Executing test cases.");
 			  
 			  //Launch the tests.
@@ -328,14 +337,14 @@ package com.example.helloworld;
 				  }  
 				  
 				  displayStatusMessage(projectCopyName + ": Tests exceded timeout: " + timeout);
-				  System.out.println("[MUTANTDEBUG]Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
+				  printStatusMessageToSTDOut("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
 			  }
 				  
 			  displayStatusMessage(projectCopyName + ": Finished executing test cases.");
-			  System.out.println("[MUTANTDEBUG]End executeTests(): " + projectCopyName);
-	    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+			  printStatusMessageToSTDOut("End executeTests(): " + projectCopyName);
+	    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  }
     	  catch (CoreException e) 
     	  {
@@ -351,8 +360,8 @@ package com.example.helloworld;
       
       private void replaceSourceCode(String projectName, int startPosition, int length, String newSource, String handleId)
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin replaceSourceCode(): " + handleId + " " + startPosition);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin replaceSourceCode(): " + handleId + " " + startPosition);
     	  displayStatusMessage(projectName + ": Replacing source code.");
     	  try 
     	  {
@@ -389,8 +398,8 @@ package com.example.helloworld;
     	  }
     	  
     	  displayStatusMessage(projectName + ": Finished replacing source code.");
-    	  System.out.println("[MUTANTDEBUG]End replaceSourceCode(): "  + handleId + " " + startPosition);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End replaceSourceCode(): "  + handleId + " " + startPosition);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }
       
       private String getIthPieceOfDataFromMutationPlanString(String mutationPlan, int index) 
@@ -405,8 +414,8 @@ package com.example.helloworld;
       //Given a project name, this method will create a copy of that project.
       private String copyProject(String projectName, String cloneName) 
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin copyProject(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin copyProject(): " + projectName);
     	  displayStatusMessage(cloneName + ": Creating mutant.");
     	  try 
     	  {
@@ -433,7 +442,7 @@ package com.example.helloworld;
 	    	    //Check that the new project exists before exiting.
 	    	    while(clone.exists() == false);
 	    	    {
-	    	    	System.out.println("[MUTANTDEBUG]Project " + clone.getName() + " not finished being created yet.");
+	    	    	printStatusMessageToSTDOut("Project " + clone.getName() + " not finished being created yet.");
 	    	    	Thread.sleep(5000);
 	    	    }
     	  } 
@@ -442,7 +451,7 @@ package com.example.helloworld;
     		  // TODO Auto-generated catch block
     		  //e.printStackTrace();
     		  displayStatusMessage(cloneName + ": Error creating mutant.");
-    		  System.out.println("[MUTANTDEBUG]CoreException: " + e.getMessage());
+    		  printStatusMessageToSTDOut("CoreException: " + e.getMessage());
     	  } 
     	  catch (InterruptedException e) 
     	  {
@@ -451,8 +460,8 @@ package com.example.helloworld;
     	  }
     	  
     	  displayStatusMessage(cloneName + ": Finished creating mutant.");
-    	  System.out.println("[MUTANTDEBUG]End copyProject(): " + projectName);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End copyProject(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return cloneName;
     	    
       }//end copyProject()
@@ -460,12 +469,12 @@ package com.example.helloworld;
       //Given a project name, this method will create a copy of that project.
       private boolean deleteProject(String projectName) 
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin deleteProject(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin deleteProject(): " + projectName);
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  if(project.exists())
     	  {
-    		  System.out.println("[MUTANTDEBUG]" + projectName + ": Deleting project.");
+    		  printStatusMessageToSTDOut("" + projectName + ": Deleting project.");
     		  displayStatusMessage(projectName + ": Deleting project.");
     		  try 
     		  {
@@ -474,7 +483,7 @@ package com.example.helloworld;
     			  //Do not proceed until the we ensure that the project no longer exists.
     	    	  while(project.exists())
     	    	  {
-    	    		  System.out.println("[MUTANTDEBUG]" + projectName + ": pending deletion.");
+    	    		  printStatusMessageToSTDOut("" + projectName + ": pending deletion.");
     	    		  displayStatusMessage(projectName + ": pending deletion.");
     	    		  Thread.sleep(10000);
     	    		  
@@ -484,15 +493,15 @@ package com.example.helloworld;
     		  {
     			  // TODO Auto-generated catch block
     			  //e.printStackTrace();
-    			  System.out.println("[MUTANTDEBUG]" + e.getMessage());
+    			  printStatusMessageToSTDOut("" + e.getMessage());
     			  return false;
     		  } 
     		  
     	  }
     	  
     	  displayStatusMessage(projectName + ": Finished deleting project.");
-    	  System.out.println("[MUTANTDEBUG]End deleteProject(): " + projectName);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End deleteProject(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return true;
       }
       
@@ -526,8 +535,8 @@ package com.example.helloworld;
       
       private String createFolderForResults(String projectName)
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin createFolderForResults(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin createFolderForResults(): " + projectName);
     	  String directoryPath = getResultsDirectory() + "\\MutationTesting_" + projectName;
     	  File f = new File(directoryPath);
     	  try
@@ -544,11 +553,11 @@ package com.example.helloworld;
     		  {
     			  if(f.mkdir()) 
         	      { 
-        	    	  System.out.println("[MUTANTDEBUG]Created directory: " + directoryPath);
+        	    	  printStatusMessageToSTDOut("Created directory: " + directoryPath);
         	      } 
         	      else 
         	      {
-        	    	  System.out.println("[MUTANTDEBUG]Failed to create directory: " + directoryPath);
+        	    	  printStatusMessageToSTDOut("Failed to create directory: " + directoryPath);
         	      }
     		  }
     	  } 
@@ -557,8 +566,8 @@ package com.example.helloworld;
     	      e.printStackTrace();
     	  } 
 		  
-    	  System.out.println("[MUTANTDEBUG]End createFolderForResults(): " + projectName);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End createFolderForResults(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return directoryPath;
       }
       
@@ -588,8 +597,8 @@ package com.example.helloworld;
       
       private ArrayList<String> createMutationPlan(String projectName, String directoryPath) throws CoreException
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin createMutationPlan(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin createMutationPlan(): " + projectName);
     	  String mutationPlanPath = directoryPath + "\\MutationPlan.txt";
     	  displayStatusMessage(projectName + ": Building mutation plan: " + mutationPlanPath);
     	  
@@ -661,15 +670,15 @@ package com.example.helloworld;
 		  printArrayListOfStringsToFile(mutationPlanPath, mutations);
 		  
 		  displayStatusMessage(projectName + ": Finished building mutation plan: " + mutationPlanPath);
-    	  System.out.println("[MUTANTDEBUG]End createMutationPlan(): " + projectName);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End createMutationPlan(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return mutations;
       }
       
       private ILaunchConfigurationWorkingCopy createJUnitRunConfiguration(String projectName) 
       {
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
-    	  System.out.println("[MUTANTDEBUG]Begin createJUnitRunConfiguration(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("Begin createJUnitRunConfiguration(): " + projectName);
     	  IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
     	  ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
     	  ILaunchConfigurationType launchType = manager.getLaunchConfigurationType("org.eclipse.jdt.junit.launchconfig");
@@ -692,8 +701,8 @@ package com.example.helloworld;
     	        
     	    }
     	  
-    	  System.out.println("[MUTANTDEBUG]End createJUnitRunConfiguration(): " + projectName);
-    	  System.out.println("[MUTANTDEBUG]--------------------------------------------------------------------");
+    	  printStatusMessageToSTDOut("End createJUnitRunConfiguration(): " + projectName);
+    	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return workingCopy;
       }
       
