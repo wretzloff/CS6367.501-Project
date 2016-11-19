@@ -246,8 +246,10 @@ package com.example.helloworld;
 		  } 
 		  catch (JavaModelException e) 
 		  {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			  // TODO Auto-generated catch block
+			  //e.printStackTrace();
+    		  displayStatusMessage(projectName + ": Error adding JUnit to build path.");
+    		  printStatusMessageToSTDOut(projectName + " Exception: " + e.getMessage());
 		  }
 		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): ");
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
