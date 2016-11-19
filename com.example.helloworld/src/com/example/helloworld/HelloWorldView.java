@@ -179,7 +179,7 @@ package com.example.helloworld;
     				  }
     				  
     				  //Add JUnit to the project copy's build path
-    				  //addJUnitToBuildPath(projectCopyName);
+    				  addJUnitToBuildPath(projectCopyName);
     				  if(!buildPathContainsJUnit(projectCopyName))
     				  {
     					  printStatusMessageToSTDOut(projectCopyName + ": JUnit not available. Moving to next mutant.");
