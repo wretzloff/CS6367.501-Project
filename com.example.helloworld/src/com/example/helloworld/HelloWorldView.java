@@ -812,7 +812,15 @@ package com.example.helloworld;
 								  sb.append("Start Position: " + node.getStartPosition() + "\n");
 								  sb.append("Length: " + node.getLength() + "\n");
 								  sb.append("Current source: " + node + "\n");
-								  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+								  if(node.getOperator().toString().equals("--"))
+								  {
+									  node.setOperator(PostfixExpression.Operator.toOperator("++"));
+								  }
+								  else
+								  {
+									  node.setOperator(PostfixExpression.Operator.toOperator("--"));
+								  }
+								  
 								  sb.append("New source: " + node + "\n");
 								  sb.append("\n");
 								  mutations.add(sb.toString());
