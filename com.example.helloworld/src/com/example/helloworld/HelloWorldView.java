@@ -7,6 +7,7 @@ package com.example.helloworld;
 
 	import java.io.*;
 	import java.util.*;
+	import java.util.List;
 	import java.text.*;
 	import org.eclipse.core.resources.*;
 	import org.eclipse.core.runtime.*;
@@ -781,9 +782,22 @@ package com.example.helloworld;
 			  {
 				  //Parse a CompilationUnit from the ICompilationUnit
 				  CompilationUnit astRoot = parse_iCompilation_Unit_To_CompilationUnit(iCompilationUnit);
+				  
+				  //Check if this compilation unit has any JUnit imports. If so, this is a test class.
+				  List<ImportDeclaration> imports = astRoot.imports();
+				  for (ImportDeclaration imp : imports) 
+				  {
+					  if(imp.getName().toString().contains("org.junit.Test"))
+					  {
+						  continue;
+					  }
+				  }
+				  
+				  //Get the AST and ASTRewrite from this CompilationUnit
 				  AST ast = astRoot.getAST();
 				  ASTRewrite rewriter = ASTRewrite.create(ast);
-				  //Each TypeDeclaration also seems to represent a class
+				  
+				  //Make sure this is a TypeDeclaration
 				  if(!(astRoot.types().get(0) instanceof TypeDeclaration))
 				  {
 					  continue;
