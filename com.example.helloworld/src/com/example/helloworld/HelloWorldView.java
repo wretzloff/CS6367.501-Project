@@ -191,6 +191,14 @@ package com.example.helloworld;
     				  
     				  //Create a new launch configuration that will launch all JUnit tests.
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
+    				  if(!launchConfiguration.exists())
+    				  {
+    					  printStatusMessageToSTDOut(projectCopyName + ": JUnit launch configuration could not be created. Moving to next mutant.");
+    					  displayStatusMessage(projectCopyName + ": JUnit launch configuration could not be created. Moving to next mutant.");
+    					  String filePath = directoryPath + "/" + projectCopyName + " - launch_configuration_not_created.txt";
+    					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    					  continue;
+    				  }
     				  
     				  //Error check: check for build errors
     				  if(hasBuildErrors(projectCopyName))
@@ -877,8 +885,17 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", projectName);
     	        workingCopy.doSave();
+    	        
+    	        //Ensure that the launch configuration exists before exiting.
+    	        int i=0;
+    	        while(!workingCopy.exists() && i<5)
+    	        {
+    	        	printStatusMessageToSTDOut("Launch COnfiguration for " + projectName + " not yet ready.");
+    				Thread.sleep(10000);
+    				i++;
+    			  }
     	  } 
-    	  catch (CoreException e) 
+    	  catch (CoreException | InterruptedException e) 
     	  {
     		  printStatusMessageToSTDOut("createJUnitRunConfiguration(): " + projectName + " " + e.getMessage());
     	  }
