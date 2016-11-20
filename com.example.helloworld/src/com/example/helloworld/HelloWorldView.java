@@ -399,7 +399,26 @@ package com.example.helloworld;
 			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
 			  
 			  //Wait some time for the launch to complete, and if it hasn't completed, terminate it.
-			  Thread.sleep(timeout);
+			  long beginTime = System.currentTimeMillis();
+			  while(!launch.isTerminated())
+			  {
+				  displayStatusMessage(projectCopyName + ": Tests not yet completed.");
+				  printStatusMessageToSTDOut("Tests for " + projectCopyName + " not yet completed.");
+				  
+				  if(System.currentTimeMillis() - beginTime > timeout)
+				  {
+					  launch.terminate();
+					  displayStatusMessage(projectCopyName + ": Tests exceded timeout: " + timeout);
+					  printStatusMessageToSTDOut("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
+					  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
+		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+		    		  break;
+				  }
+				  
+				  Thread.sleep(10000);
+			  }
+				  
+			  /*Thread.sleep(timeout);
 			  IProcess[] processes = launch.getProcesses();
 			  boolean processNotTerminated = false;
 			  for(IProcess process : processes)
@@ -421,7 +440,7 @@ package com.example.helloworld;
 				  printStatusMessageToSTDOut("Tests for " + launchConfiguration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "") + " exceded timeout: " + timeout);
 				  String filePath = directoryPath + "/" + projectCopyName + " - tests_timed_out.txt";
 	    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
-			  }
+			  }*/
 				  
 			  displayStatusMessage(projectCopyName + ": Finished executing test cases.");
 			  printStatusMessageToSTDOut("End executeTests(): " + projectCopyName);
