@@ -193,21 +193,10 @@ package com.example.helloworld;
     				  ILaunchConfiguration launchConfiguration = createJUnitRunConfiguration(projectCopyName);
     				  
     				  //Error check: check for build errors
-    				  boolean foundErrors = false;
-    				  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectCopyName);
-    				  IMarker[] markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
-    				  for (IMarker marker: markers)
+    				  if(hasBuildErrors(projectCopyName))
     				  {
-    					  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
-    					  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
-    					  {
-    						  printStatusMessageToSTDOut("Marker: " + marker.getResource());
-    						  foundErrors = true;
-    					  }
-    				  }
-    				  if(foundErrors == true)
-    				  {
-						  printStatusMessageToSTDOut("Build errors in project " + projectCopyName);
+						  printStatusMessageToSTDOut(projectCopyName + ": Build errors. Moving to next mutant.");
+						  displayStatusMessage(projectCopyName + ": Build errors. Moving to next mutant.");
 						  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
     		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
     		    		  continue;
@@ -262,6 +251,34 @@ package com.example.helloworld;
 		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): ");
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
+      
+      private boolean hasBuildErrors(String projectName)
+      {
+    	  boolean returnValue = false;
+    	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		  IMarker[] markers;
+		  try 
+		  {
+			  markers = projectCopy.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+			  for (IMarker marker: markers)
+			  {
+				  Integer severityType = (Integer) marker.getAttribute(IMarker.SEVERITY);
+				  if (severityType.intValue() == IMarker.SEVERITY_ERROR)
+				  {
+					  printStatusMessageToSTDOut("Marker: " + marker.getResource());
+					  returnValue = true;
+				  }
+			  }
+		  } 
+		  catch (CoreException e) 
+		  {
+			  // TODO Auto-generated catch block
+			  //e.printStackTrace();
+			  printStatusMessageToSTDOut(projectName + " Exception: " + e.getMessage());
+		  }
+		  
+    	  return returnValue;
+      }
       
       private boolean buildPathContainsJUnit(String projectName)
       {
@@ -783,11 +800,11 @@ package com.example.helloworld;
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
     	        workingCopy.setAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", projectName);
     	        workingCopy.doSave();
-    	        
-    	    } 
-    	    catch (CoreException e) {
-    	        
-    	    }
+    	  } 
+    	  catch (CoreException e) 
+    	  {
+    		  printStatusMessageToSTDOut("createJUnitRunConfiguration(): " + projectName + " " + e.getMessage());
+    	  }
     	  
     	  printStatusMessageToSTDOut("End createJUnitRunConfiguration(): " + projectName);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
