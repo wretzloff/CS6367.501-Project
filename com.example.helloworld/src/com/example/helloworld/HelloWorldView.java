@@ -227,7 +227,7 @@ package com.example.helloworld;
       private void addJUnitToBuildPath(String projectName)
       {
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
-    	  printStatusMessageToSTDOut("Begin addJUnitToBuildPath(): ");
+    	  printStatusMessageToSTDOut("Begin addJUnitToBuildPath(): " + projectName);
     	  IProject projectCopy = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		  IJavaProject javaProject = JavaCore.create(projectCopy);
 		  IClasspathEntry[] rawClasspath;
@@ -240,15 +240,28 @@ package com.example.helloworld;
 			IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
 			newClasspath[rawClasspath.length] =junitEntry;
 			javaProject.setRawClasspath(newClasspath,null);
+			
+			for(int i=0; i<5; i++)
+			{
+  			  if(buildPathContainsJUnit(projectName))
+  			  {
+  				  break;
+  			  }
+  			  else
+  			  {
+  				  printStatusMessageToSTDOut(projectName + " addJUnitToBuildPath(): pending JUnit add.");
+  				  Thread.sleep(3000);
+  			  }
+			}
 		  } 
-		  catch (JavaModelException e) 
+		  catch (JavaModelException | InterruptedException e) 
 		  {
 			  // TODO Auto-generated catch block
 			  //e.printStackTrace();
     		  displayStatusMessage(projectName + ": Error adding JUnit to build path.");
     		  printStatusMessageToSTDOut(projectName + " Exception: " + e.getMessage());
 		  }
-		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): ");
+		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): " + projectName);
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
       
