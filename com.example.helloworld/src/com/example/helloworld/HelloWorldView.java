@@ -203,7 +203,15 @@ package com.example.helloworld;
     				  }
   
     				  //Execute JUnit tests on project copy.
-    				  executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
+    				  ILaunch launch = executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
+    				  if(launch == null || (!launch.isTerminated()))
+    				  {
+    					  printStatusMessageToSTDOut(projectCopyName + ": JUnit tests not terminated successfully. Moving to next mutant.");
+						  displayStatusMessage(projectCopyName + ": JUnit tests not terminated successfully. Moving to next mutant.");
+						  String filePath = directoryPath + "/" + projectCopyName + " - JUnit_tests_not_terminated_successfully.txt";
+    		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+    		    		  continue;
+    				  }
     				  
     				  //Delete launch configuration now that we're done with it
     				  deleteJUnitRunConfiguration(launchConfiguration);
@@ -384,8 +392,9 @@ package com.example.helloworld;
 		  }
       }
       
-      private void executeTests(String projectCopyName, ILaunchConfiguration launchConfiguration, String directoryPath, int timeout)
+      private ILaunch executeTests(String projectCopyName, ILaunchConfiguration launchConfiguration, String directoryPath, int timeout)
       {
+    	  ILaunch launch = null;
     	  try
     	  {
     		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
@@ -396,7 +405,7 @@ package com.example.helloworld;
 			  displayStatusMessage(projectCopyName + ": Executing test cases.");
 			  
 			  //Launch the tests.
-			  ILaunch launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+			  launch = launchConfiguration.launch(ILaunchManager.RUN_MODE, null);
 			  
 			  //Wait some time for the launch to complete, and if it hasn't completed, terminate it.
 			  long beginTime = System.currentTimeMillis();
@@ -416,6 +425,15 @@ package com.example.helloworld;
 				  }
 				  
 				  Thread.sleep(10000);
+			  }
+			  
+			  //Make sure the launch is terminated before exiting.
+			  int i=0;
+			  while(!launch.isTerminated() && i<5)
+			  {
+				  printStatusMessageToSTDOut("Waiting for tests for " + projectCopyName + " to be terminated.");
+				  Thread.sleep(10000);
+				  i++;
 			  }
 				  
 			  /*Thread.sleep(timeout);
@@ -452,6 +470,7 @@ package com.example.helloworld;
     		  printStatusMessageToSTDOut("ExecuteTests() exception: " + projectCopyName + " " + e.getMessage());
     	  } 
     	  
+    	  return launch;
       }//end executeTests()
       
       private void replaceSourceCode(String projectName, int startPosition, int length, String newSource, String handleId)
