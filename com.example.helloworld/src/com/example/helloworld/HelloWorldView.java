@@ -206,7 +206,7 @@ package com.example.helloworld;
     				  executeTests(projectCopyName, launchConfiguration, directoryPath, timeout);
     				  
     				  //Delete launch configuration now that we're done with it
-    				  launchConfiguration.delete();
+    				  deleteJUnitRunConfiguration(launchConfiguration);
     				  
     				  //Clean up the project copy now that we're done with it
     				  deleteProject(projectCopyName);
@@ -778,6 +778,32 @@ package com.example.helloworld;
     	  printStatusMessageToSTDOut("End createMutationPlan(): " + projectName);
     	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
     	  return mutations;
+      }
+      
+      private void deleteJUnitRunConfiguration(ILaunchConfiguration launchConfiguration) 
+      {
+    	  try 
+    	  {
+    		  launchConfiguration.delete();
+    		  for(int i=0; i<5; i++)
+    		  {
+    			  if(!launchConfiguration.exists())
+    			  {
+    				  break;
+    			  }
+    			  else
+    			  {
+    				  printStatusMessageToSTDOut("deleteJUnitRunConfiguration(): not finished deleting.");
+    				  Thread.sleep(3000);
+    			  }
+    		  }
+    	  } 
+    	  catch (CoreException | InterruptedException e) 
+    	  {
+    		  // TODO Auto-generated catch block
+    		  e.printStackTrace();
+    		  printStatusMessageToSTDOut("deleteJUnitRunConfiguration() exception: " + e.getMessage());
+    	  }
       }
       
       private ILaunchConfigurationWorkingCopy createJUnitRunConfiguration(String projectName) 
