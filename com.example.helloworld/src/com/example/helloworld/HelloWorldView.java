@@ -202,7 +202,7 @@ package com.example.helloworld;
     				  }
     				  
     				  //Error check: check for build errors
-    				  if(hasBuildErrors(projectCopyName))
+    				  if(projectHasBuildErrors(projectCopyName))
     				  {
 						  printStatusMessageToSTDOut(projectCopyName + ": Build errors. Moving to next mutant.");
 						  displayStatusMessage(projectCopyName + ": Build errors. Moving to next mutant.");
@@ -281,6 +281,32 @@ package com.example.helloworld;
 		  printStatusMessageToSTDOut("end addJUnitToBuildPath(): " + projectName);
 		  printStatusMessageToSTDOut("--------------------------------------------------------------------");
       }//end addJUnitToBuildPath()
+      
+      private boolean projectHasBuildErrors(String projectName)
+      {
+    	  boolean returnValue;
+    	  int i=0;
+    	  do
+    	  {
+    		  returnValue = hasBuildErrors(projectName);
+    		  if(returnValue == true)
+    		  {
+    			  displayStatusMessage(projectName + ": Project still has build errors. Pausing.");
+    			  try 
+    			  {
+    				  Thread.sleep(10000);
+    			  } 
+    			  catch (InterruptedException e) 
+    			  {
+					// TODO Auto-generated catch block
+    				  printStatusMessageToSTDOut(projectName + " projectHasBuildErrors() Exception: " + e.getMessage());
+    			  }
+    		  }
+    		  i++;
+    	  }while(returnValue == true && i<5);
+    	  
+    	  return returnValue;
+      }
       
       private boolean hasBuildErrors(String projectName)
       {
