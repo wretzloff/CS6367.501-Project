@@ -106,6 +106,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": Project already exists. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - project_already_exists.txt";
 					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+					  deleteProject(projectCopyName);
 					  continue;
 				  }
 				  
@@ -117,6 +118,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": Project could not be created. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_create_mutant.txt";
 					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+					  deleteProject(projectCopyName);
 					  continue;
 				  }
 				  
@@ -128,6 +130,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": Failed to modify source code. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - failure_to_modify_source.txt";
 					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+					  deleteProject(projectCopyName);
 					  continue;
 				  }
 				  
@@ -139,6 +142,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": JUnit not available. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - JUnit_not_available.txt";
 					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+					  deleteProject(projectCopyName);
 					  continue;
 				  }
 				  
@@ -150,6 +154,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": JUnit launch configuration could not be created. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - launch_configuration_not_created.txt";
 					  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+					  deleteProject(projectCopyName);
 					  continue;
 				  }
 				  
@@ -160,6 +165,7 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": Build errors. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - build_errors.txt";
 		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+		    		  deleteProject(projectCopyName);
 		    		  continue;
 				  }
 
@@ -171,11 +177,12 @@ public class MutationTestingLogic implements Runnable
 					  displayStatusMessage(projectCopyName + ": JUnit tests not terminated successfully. Moving to next mutant.");
 					  String filePath = directoryPath + "/" + projectCopyName + " - JUnit_tests_not_terminated_successfully.txt";
 		    		  printArrayListOfStringsToFile(filePath, new ArrayList<String>());
+		    		  deleteProject(projectCopyName);
 		    		  continue;
 				  }
 				  
 				  //Delete launch configuration now that we're done with it
-				  deleteJUnitRunConfiguration(launchConfiguration);
+				  //deleteJUnitRunConfiguration(launchConfiguration);
 				  
 				  //Clean up the project copy now that we're done with it
 				  deleteProject(projectCopyName);
