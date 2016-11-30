@@ -1,14 +1,9 @@
 public class SampleProjClass1 
 {
-
 	public int returnOne()
 	{
 		int a = 0;
 		a++;
-		
-		int b = 0;
-		//b++;
-		
 		return a;
 	}
 	
