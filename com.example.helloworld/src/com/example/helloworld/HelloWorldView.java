@@ -60,7 +60,7 @@ package com.example.helloworld;
 		   labelChooseTimeout.setText("Specify timeout: ");
 		   
 		   textTimeoutArea = new Text(left, SWT.BORDER);
-		   textTimeoutArea.setText("10000");
+		   textTimeoutArea.setText("100000");
 		   
 		   buttonStart = new Button(left, SWT.WRAP);
 		   buttonStart.setText("Start");
