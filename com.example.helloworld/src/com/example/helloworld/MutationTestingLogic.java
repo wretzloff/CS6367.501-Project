@@ -351,7 +351,21 @@ public class MutationTestingLogic implements Runnable
 	    	  {
 	        	  printStatusMessageToSTDOut("--------------------------------------------------------------------");
 	        	  printStatusMessageToSTDOut("Begin sessionFinished(): ");
-	        	
+	        	  
+	        	  ITestElement.Result a = session.getTestResult(false);
+	        	  printStatusMessageToSTDOut(a.toString());
+	        	  int i = 0;
+	        	  while(a.toString().equals("Undefined") && i<5)
+				  {
+	        		  printStatusMessageToSTDOut(session.getLaunchedProject().getElementName() + ": undefined. Sleep temporarily.");
+	        		  i++;
+					  try {
+						Thread.sleep(10000);
+					  } catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					  }
+				  }
 	        	  //Create a temporary ArrayList to hold each line of the test results 
 		    	  ArrayList<String> results = new ArrayList<String>();
 	    		  
@@ -364,6 +378,7 @@ public class MutationTestingLogic implements Runnable
 	    		  
 	    		  //Create a file and print the results
 	    		  String resultsFilePath = directoryPath + "/" + session.getLaunchedProject().getElementName() + " - " + session.getTestResult(false) + ".txt";
+	    		  
 	    		  printArrayListOfStringsToFile(resultsFilePath, results);
 	    		  
 	        	  printStatusMessageToSTDOut("End sessionFinished(): ");
